@@ -9,7 +9,7 @@ dist/
 web-build/
 expo-env.d.ts
 
-# Native
+# Native (Continuous Native Generation)
 .kotlin/
 *.orig.*
 *.jks
@@ -17,6 +17,9 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+*.pem
+/ios
+/android
 
 # Metro
 .metro-health-check*
@@ -25,19 +28,35 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+pnpm-debug.*
 
-# macOS
+# macOS / OS
 .DS_Store
-*.pem
+Thumbs.db
 
-# local env files
-.env*.local
+# Environment and secrets — never commit real values
+.env
+.env.*
+!.env.example
+*.keystore
+google-services.json
+GoogleService-Info.plist
+service-account*.json
+*-firebase-adminsdk*.json
+credentials.json
+secrets/
 
 # typescript
 *.tsbuildinfo
 
-example
+# IDE / editor
+.idea/
+*.swp
+*.swo
+.history/
 
-# generated native folders
-/ios
-/android
+# testing / coverage
+coverage/
+
+# EAS / local
+eas-update-local.tar.gz
