@@ -2,6 +2,21 @@
   "name": "autotrack-mobile",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0",
+    "npm": ">=10.0.0"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "expo lint",
+    "typecheck": "tsc --noEmit",
+    "reset-project": "node ./scripts/reset-project.js",
+    "commit": "cz"
+  },
   "dependencies": {
     "@expo/ui": "~57.0.22",
     "expo": "~57.0.27",
@@ -31,18 +46,13 @@
     "@types/react": "~19.2.2",
     "commitizen": "^4.3.2",
     "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "~57.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "prettier": "^3.9.9",
     "typescript": "~6.0.3"
   },
-  "scripts": {
-    "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "lint": "expo lint",
-    "commit": "cz"
-  },
-  "private": true,
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
