@@ -9,6 +9,8 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Autenticação Firebase no mobile (e-mail/senha + Google via AuthSession), AuthProvider, bootstrap de perfil com mock enquanto a API sobe (`ATP-31`)
+- Documentação em `docs/auth.md` e variáveis Firebase/Google em `.env.example`
 - Design System inicial com tokens tipados, temas light/dark, primitivos UI e catálogo `/design-system` (`ATP-8`)
 - Documentação em `docs/design-system.md`
 - Bootstrap do repositório Expo + React Native + TypeScript (`ATP-10`)

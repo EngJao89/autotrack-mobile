@@ -1,98 +1,72 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { Badge, Button, Card, Screen, Text } from '@/components/ui';
+import { useAuth } from '@/features/auth';
+import { useAppTheme } from '@/theme';
 
 export default function HomeScreen() {
+  const theme = useAppTheme();
+  const { profile, firebaseUser, isMockProfile, signOut, getAccessToken } = useAuth();
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            AutoTrack
-          </ThemedText>
-        </ThemedView>
+    <Screen scroll>
+      <View style={{ gap: theme.spacing[24] }}>
+        <View style={{ gap: theme.spacing[8] }}>
+          <Text variant="title">AutoTrack</Text>
+          <Text variant="body" color="secondary">
+            Sessão autenticada via Firebase. O perfil local vem da autotrack-api (ou mock).
+          </Text>
+        </View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+        <Card elevated>
+          <View style={{ gap: theme.spacing[12] }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: theme.spacing[8],
+              }}
+            >
+              <Text variant="subtitle">Perfil</Text>
+              {isMockProfile ? (
+                <Badge label="Mock API" tone="warning" />
+              ) : (
+                <Badge label="API" tone="success" />
+              )}
+            </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+            <Text variant="label">E-mail</Text>
+            <Text variant="body">{profile?.email || firebaseUser?.email || '—'}</Text>
+
+            <Text variant="label">Nome</Text>
+            <Text variant="body">{profile?.name || firebaseUser?.displayName || '—'}</Text>
+
+            <Text variant="label">firebaseUid</Text>
+            <Text variant="caption" color="secondary">
+              {profile?.firebaseUid || firebaseUser?.uid || '—'}
+            </Text>
+
+            <Text variant="caption" color="secondary">
+              Identidade estável: firebaseUid. E-mail é dado do provedor e não autoriza sozinho.
+            </Text>
+          </View>
+        </Card>
+
+        <View style={{ gap: theme.spacing[12] }}>
+          <Button
+            label="Copiar ID Token (dev)"
+            variant="secondary"
+            onPress={async () => {
+              const token = await getAccessToken();
+              if (__DEV__) {
+                console.log('[auth] Firebase ID Token length:', token?.length ?? 0);
+              }
+            }}
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+          <Button label="Sair" variant="destructive" onPress={() => void signOut()} />
+        </View>
+      </View>
+    </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});

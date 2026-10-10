@@ -4,7 +4,7 @@ Aplicativo mobile do **AutoTrack** — acompanhamento de veículos e manutençõ
 
 Este repositório é a base do app cliente (Expo / React Native / TypeScript). Ele consome a API backend [`autotrack-api`](https://github.com/EngJao89/autotrack-api).
 
-> **Status:** `Unreleased`. Design System inicial disponível (ver [docs/design-system.md](./docs/design-system.md)). Autenticação Firebase, navegação definitiva, integração completa com a API e módulos de negócio serão tratados em tarefas futuras.
+> **Status:** `Unreleased`. Design System e autenticação Firebase (front) disponíveis — ver [docs/design-system.md](./docs/design-system.md) e [docs/auth.md](./docs/auth.md). Integração completa com a API, navegação definitiva e módulos de negócio seguem em tarefas futuras.
 
 ## Stack inicial
 
@@ -82,13 +82,16 @@ autotrack-mobile/
 ├── docs/                   # Documentação técnica (ex.: design system)
 ├── scripts/                # Utilitários de manutenção (ex.: reset do template)
 ├── src/
-│   ├── app/                # Rotas e telas (Expo Router)
+│   ├── app/                # Rotas ((auth), (tabs)) — Expo Router
 │   ├── components/
 │   │   └── ui/             # Primitivos do Design System
+│   ├── config/             # Env público do cliente
+│   ├── features/auth/      # AuthProvider e fluxos de login
+│   ├── services/           # Firebase + cliente HTTP da API
 │   ├── constants/          # Constantes legadas do template Expo
 │   ├── hooks/              # Hooks compartilhados
 │   ├── theme/              # Tokens tipados + ThemeProvider
-│   └── types/              # Declarações TypeScript auxiliares
+│   └── types/              # Tipos de domínio (User, etc.)
 ├── .env.example            # Nomes das variáveis de ambiente (sem segredos)
 ├── app.json                # Configuração Expo (sem segredos)
 ├── eslint.config.js        # ESLint + Prettier
@@ -177,7 +180,8 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | --- | --- |
 | ✅ ATP-10 | Bootstrap do repositório, README, lint/typecheck, estrutura inicial |
 | ✅ ATP-8 | Design System inicial (tokens, primitivos, catálogo) |
-| Planejado | Navegação definitiva, Firebase Auth |
+| ✅ ATP-31 | Auth Firebase no mobile + vínculo/bootstrap de perfil (mock-ready) |
+| Planejado | Navegação definitiva, perfil de negócio (ATP-29) |
 | Planejado | Integração com `autotrack-api` |
 | Planejado | Módulos (usuários, veículos, manutenções) |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
