@@ -9,6 +9,8 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Design System inicial com tokens tipados, temas light/dark, primitivos UI e catálogo `/design-system` (`ATP-8`)
+- Documentação em `docs/design-system.md`
 - Bootstrap do repositório Expo + React Native + TypeScript (`ATP-10`)
 - README inicial com visão geral, pré-requisitos, instalação, execução e contribuição
 - `.env.example` com variáveis públicas documentadas (sem segredos)

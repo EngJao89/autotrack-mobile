@@ -4,7 +4,7 @@ Aplicativo mobile do **AutoTrack** — acompanhamento de veículos e manutençõ
 
 Este repositório é a base do app cliente (Expo / React Native / TypeScript). Ele consome a API backend [`autotrack-api`](https://github.com/EngJao89/autotrack-api).
 
-> **Status:** em bootstrap (`Unreleased`). Autenticação Firebase, navegação definitiva, integração completa com a API e módulos de negócio serão tratados em tarefas futuras.
+> **Status:** `Unreleased`. Design System inicial disponível (ver [docs/design-system.md](./docs/design-system.md)). Autenticação Firebase, navegação definitiva, integração completa com a API e módulos de negócio serão tratados em tarefas futuras.
 
 ## Stack inicial
 
@@ -79,12 +79,15 @@ npm run web
 ```text
 autotrack-mobile/
 ├── assets/                 # Imagens, ícones e fontes
+├── docs/                   # Documentação técnica (ex.: design system)
 ├── scripts/                # Utilitários de manutenção (ex.: reset do template)
 ├── src/
 │   ├── app/                # Rotas e telas (Expo Router)
-│   ├── components/         # Componentes reutilizáveis
-│   ├── constants/          # Tokens e constantes de UI
+│   ├── components/
+│   │   └── ui/             # Primitivos do Design System
+│   ├── constants/          # Constantes legadas do template Expo
 │   ├── hooks/              # Hooks compartilhados
+│   ├── theme/              # Tokens tipados + ThemeProvider
 │   └── types/              # Declarações TypeScript auxiliares
 ├── .env.example            # Nomes das variáveis de ambiente (sem segredos)
 ├── app.json                # Configuração Expo (sem segredos)
@@ -95,7 +98,9 @@ autotrack-mobile/
 └── README.md
 ```
 
-Pastas como `features/`, `services/`, `types/`, `utils/` e `config/` serão introduzidas quando houver código real correspondente — evitando módulos vazios prematuros.
+Catálogo visual em desenvolvimento: rota `/design-system` (aba **UI Kit**).
+
+Pastas como `features/`, `services/` e `utils/` serão introduzidas quando houver código real correspondente — evitando módulos vazios prematuros.
 
 Código de rota fica em `src/app/`. Componentes, hooks e utilitários **não** devem ser criados dentro de `src/app/`.
 
@@ -171,7 +176,8 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | Etapa | Escopo |
 | --- | --- |
 | ✅ ATP-10 | Bootstrap do repositório, README, lint/typecheck, estrutura inicial |
-| Planejado | Navegação definitiva, design system, Firebase Auth |
+| ✅ ATP-8 | Design System inicial (tokens, primitivos, catálogo) |
+| Planejado | Navegação definitiva, Firebase Auth |
 | Planejado | Integração com `autotrack-api` |
 | Planejado | Módulos (usuários, veículos, manutenções) |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
