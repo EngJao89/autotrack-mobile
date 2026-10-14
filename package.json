@@ -15,6 +15,7 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test src/config/firebaseConfig.test.ts src/features/auth/mapFirebaseError.test.ts",
+    "check:deps": "node scripts/check-feature-deps.mjs",
     "reset-project": "node ./scripts/reset-project.js",
     "commit": "cz"
   },

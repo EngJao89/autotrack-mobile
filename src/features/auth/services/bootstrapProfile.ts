@@ -1,14 +1,16 @@
 import type { User as FirebaseUser } from 'firebase/auth';
 
 import { env } from '@/config/env';
-import type { User } from '@/types/user';
+import { ApiError, apiRequest } from '@/services/api/client';
 
-import { ApiError, apiRequest } from './client';
+import type { User } from '../types/user';
 
 /**
  * Creates or returns the authenticated local profile.
  * Contract aligned with autotrack-api (ATP-30): Bearer Firebase ID token.
  * Prefer POST /v1/auth/bootstrap; fallback GET /v1/users/me.
+ *
+ * Mock adapter is explicit when EXPO_PUBLIC_API_MOCK=true — not a real API integration.
  */
 export async function bootstrapUserProfile(
   firebaseUser: FirebaseUser,

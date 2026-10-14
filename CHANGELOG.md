@@ -7,6 +7,10 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Changed
+
+- Consolidação feature-first: Auth como módulo de referência, rotas finas, `docs/architecture.md` e `npm run check:deps` (`ATP-7`)
+
 ### Fixed
 
 - Cadastro Firebase com API key inválida: validação do `firebaseConfig` Web, bloqueio de chave privada no cliente e mensagens amigáveis (`ATP-32`)

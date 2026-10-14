@@ -4,9 +4,9 @@ import * as WebBrowser from 'expo-web-browser';
 import { Platform } from 'react-native';
 
 import { env, getGoogleConfigHint, isGoogleConfigured } from '@/config/env';
-import { getGooglePlatformHint } from '@/services/auth';
 
-import { useAuth } from './AuthProvider';
+import { useAuth } from '../AuthProvider';
+import { getGooglePlatformHint } from '../services/session';
 
 WebBrowser.maybeCompleteAuthSession();
 

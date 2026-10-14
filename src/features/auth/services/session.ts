@@ -10,9 +10,9 @@ import {
 import { Platform } from 'react-native';
 
 import { getFirebaseSetupMessage, isFirebaseConfigured, isGoogleConfigured } from '@/config/env';
-import { mapFirebaseError } from '@/features/auth/mapFirebaseError';
+import { getFirebaseAuth } from '@/services/firebase';
 
-import { getFirebaseAuth } from './firebase';
+import { mapFirebaseError } from '../mapFirebaseError';
 
 export type AuthCredentials = {
   email: string;
