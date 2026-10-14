@@ -9,7 +9,8 @@ import {
 } from 'firebase/auth';
 import { Platform } from 'react-native';
 
-import { isGoogleConfigured } from '@/config/env';
+import { getFirebaseSetupMessage, isFirebaseConfigured, isGoogleConfigured } from '@/config/env';
+import { mapFirebaseError } from '@/features/auth/mapFirebaseError';
 
 import { getFirebaseAuth } from './firebase';
 
@@ -18,21 +19,45 @@ export type AuthCredentials = {
   password: string;
 };
 
+function assertFirebaseReady(): void {
+  if (!isFirebaseConfigured()) {
+    throw new Error(getFirebaseSetupMessage());
+  }
+}
+
+async function withMappedFirebaseError<T>(operation: () => Promise<T>): Promise<T> {
+  try {
+    return await operation();
+  } catch (error) {
+    throw new Error(mapFirebaseError(error));
+  }
+}
+
 export async function signInWithEmail({
   email,
   password,
 }: AuthCredentials): Promise<UserCredential> {
-  return signInWithEmailAndPassword(getFirebaseAuth(), email.trim(), password);
+  assertFirebaseReady();
+  return withMappedFirebaseError(() =>
+    signInWithEmailAndPassword(getFirebaseAuth(), email.trim(), password)
+  );
 }
 
 export async function registerWithEmail({
   email,
   password,
 }: AuthCredentials): Promise<UserCredential> {
-  return createUserWithEmailAndPassword(getFirebaseAuth(), email.trim(), password);
+  assertFirebaseReady();
+  // Never send password anywhere except Firebase Auth SDK.
+  return withMappedFirebaseError(() =>
+    createUserWithEmailAndPassword(getFirebaseAuth(), email.trim(), password)
+  );
 }
 
 export async function signOut(): Promise<void> {
+  if (!isFirebaseConfigured()) {
+    return;
+  }
   await firebaseSignOut(getFirebaseAuth());
 }
 
@@ -45,14 +70,17 @@ export async function getIdToken(user: FirebaseUser, forceRefresh = false): Prom
  * Requires a Google OAuth `id_token` (AuthSession or native Google Sign-In).
  */
 export async function signInWithGoogleIdToken(idToken: string): Promise<UserCredential> {
+  assertFirebaseReady();
   if (!isGoogleConfigured()) {
     throw new Error(
       'Google Sign-In não configurado. Defina EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID no .env.'
     );
   }
 
-  const credential = GoogleAuthProvider.credential(idToken);
-  return signInWithCredential(getFirebaseAuth(), credential);
+  return withMappedFirebaseError(() => {
+    const credential = GoogleAuthProvider.credential(idToken);
+    return signInWithCredential(getFirebaseAuth(), credential);
+  });
 }
 
 export function getGooglePlatformHint(): string {

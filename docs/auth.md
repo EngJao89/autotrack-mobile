@@ -25,14 +25,31 @@ Identidade estável de autorização: **`firebaseUid`**. E-mail é dado do prove
 ## Configuração Firebase Console
 
 1. Crie/use o projeto Firebase do AutoTrack.
-2. Authentication → Sign-in method:
-   - habilite **Google**
-   - habilite **E-mail/senha**
-3. Registre um app **Web** e copie as chaves para o `.env` (`EXPO_PUBLIC_FIREBASE_*`).
+2. Authentication → Get started (se for a primeira vez) → Sign-in method:
+   - habilite **E-mail/senha** (Email/Password) e salve — sem isso o cadastro retorna `auth/configuration-not-found`
+   - habilite **Google** se for usar login social
+3. Registre um app **Web** (`</>`) e copie **apenas** o `firebaseConfig` para o `.env`.
 4. Em Google Cloud / Firebase, configure OAuth client IDs e preencha `EXPO_PUBLIC_GOOGLE_*_CLIENT_ID`.
 5. Domínios autorizados e SHA-1 (Android) conforme o ambiente (dev/prod).
+6. Reinicie o Metro (`npx expo start`) depois de alterar o `.env`.
 
-**Nunca** coloque service account / Admin SDK no mobile.
+### Formato esperado (app Web)
+
+| Variável | Formato |
+| --- | --- |
+| `EXPO_PUBLIC_FIREBASE_API_KEY` | Começa com `AIza…` (curta, sem espaços) |
+| `EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN` | `seu-projeto.firebaseapp.com` |
+| `EXPO_PUBLIC_FIREBASE_PROJECT_ID` | id do projeto |
+| `EXPO_PUBLIC_FIREBASE_APP_ID` | `1:…:web:…` (app Web, não iOS/Android) |
+| `EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | somente números |
+
+**Não cole** no mobile:
+- chave privada / PEM (`BEGIN PRIVATE KEY`)
+- service account JSON
+- código Swift / `AppDelegate`
+- Admin SDK
+
+Se uma chave privada foi colada por engano no `.env`, remova-a, use o `apiKey` Web correto e **revogue/rotacione** a chave privada no Google Cloud.
 
 ## Variáveis de ambiente
 

@@ -7,6 +7,10 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Cadastro Firebase com API key inválida: validação do `firebaseConfig` Web, bloqueio de chave privada no cliente e mensagens amigáveis (`ATP-32`)
+
 ### Added
 
 - Autenticação Firebase no mobile (e-mail/senha + Google via AuthSession), AuthProvider, bootstrap de perfil com mock enquanto a API sobe (`ATP-31`)

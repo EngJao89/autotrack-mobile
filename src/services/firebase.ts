@@ -3,16 +3,14 @@ import { FirebaseApp, getApp, getApps, initializeApp } from 'firebase/app';
 import { Auth, getAuth, getReactNativePersistence, initializeAuth } from 'firebase/auth';
 import { Platform } from 'react-native';
 
-import { env, isFirebaseConfigured } from '@/config/env';
+import { env, getFirebaseSetupMessage, isFirebaseConfigured } from '@/config/env';
 
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 
 export function getFirebaseApp(): FirebaseApp {
   if (!isFirebaseConfigured()) {
-    throw new Error(
-      'Firebase não configurado. Preencha as variáveis EXPO_PUBLIC_FIREBASE_* no arquivo .env (veja .env.example).'
-    );
+    throw new Error(getFirebaseSetupMessage());
   }
 
   if (app) {
