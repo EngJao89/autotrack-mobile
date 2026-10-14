@@ -4,7 +4,7 @@ Aplicativo mobile do **AutoTrack** — acompanhamento de veículos e manutençõ
 
 Este repositório é a base do app cliente (Expo / React Native / TypeScript). Ele consome a API backend [`autotrack-api`](https://github.com/EngJao89/autotrack-api).
 
-> **Status:** `Unreleased`. Design System e autenticação Firebase (front) disponíveis — ver [docs/design-system.md](./docs/design-system.md) e [docs/auth.md](./docs/auth.md). Integração completa com a API, navegação definitiva e módulos de negócio seguem em tarefas futuras.
+> **Status:** `Unreleased`. Arquitetura feature-first documentada — ver [docs/architecture.md](./docs/architecture.md). Design System e autenticação Firebase: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).
 
 ## Stack inicial
 
@@ -70,42 +70,46 @@ npm run web
 | `npm run web` | Abre no navegador |
 | `npm run lint` | Executa o ESLint |
 | `npm run typecheck` | Verifica tipos com TypeScript (`tsc --noEmit`) |
+| `npm test` | Testes unitários (`node:test`) |
+| `npm run check:deps` | Valida limites de import feature-first |
 | `npm run commit` | Abre o assistente Commitizen (Conventional Commits) |
 
-> **Testes:** `npm test` roda checagens com `node:test` (config Firebase e mapeamento de erros de auth). Cobertura de UI/E2E ainda planejada.
+> **Testes:** `npm test` cobre config Firebase e mapeamento de erros de auth. UI/E2E ainda planejada.
 
 ## Estrutura do projeto
 
 ```text
 autotrack-mobile/
-├── assets/                 # Imagens, ícones e fontes
-├── docs/                   # Documentação técnica (ex.: design system)
-├── scripts/                # Utilitários de manutenção (ex.: reset do template)
+├── assets/
+├── docs/
+│   ├── architecture.md     # Feature-first (ATP-7)
+│   ├── auth.md
+│   └── design-system.md
+├── scripts/
+│   └── check-feature-deps.mjs
 ├── src/
-│   ├── app/                # Rotas ((auth), (tabs)) — Expo Router
-│   ├── components/
-│   │   └── ui/             # Primitivos do Design System
-│   ├── config/             # Env público do cliente
-│   ├── features/auth/      # AuthProvider e fluxos de login
-│   ├── services/           # Firebase + cliente HTTP da API
-│   ├── constants/          # Constantes legadas do template Expo
-│   ├── hooks/              # Hooks compartilhados
-│   ├── theme/              # Tokens tipados + ThemeProvider
-│   └── types/              # Tipos de domínio (User, etc.)
-├── .env.example            # Nomes das variáveis de ambiente (sem segredos)
-├── app.json                # Configuração Expo (sem segredos)
-├── eslint.config.js        # ESLint + Prettier
+│   ├── app/                # Rotas finas (Expo Router)
+│   ├── features/
+│   │   └── auth/           # Feature de referência (sessão, login, bootstrap)
+│   ├── components/ui/      # Design System
+│   ├── theme/              # Tokens + ThemeProvider
+│   ├── services/           # Infra: Firebase init + HTTP client
+│   ├── config/             # Env público + validação
+│   ├── constants/          # Legado do template Expo
+│   ├── hooks/              # Hooks genéricos
+│   └── types/              # Tipos compartilhados justificados (ex.: css.d.ts)
+├── .env.example
+├── app.json
 ├── package.json
-├── tsconfig.json
 ├── CHANGELOG.md
 └── README.md
 ```
 
-Catálogo visual em desenvolvimento: rota `/design-system` (aba **UI Kit**).
+Convenções e limites: [docs/architecture.md](./docs/architecture.md).  
+Catálogo visual: rota `/design-system` (aba **UI Kit**).  
+Features futuras (perfil, veículos, manutenções) têm limites documentados — **sem** pastas vazias nesta fase.
 
-Pastas como `features/`, `services/` e `utils/` serão introduzidas quando houver código real correspondente — evitando módulos vazios prematuros.
-
-Código de rota fica em `src/app/`. Componentes, hooks e utilitários **não** devem ser criados dentro de `src/app/`.
+Código de rota fica em `src/app/` e apenas reexporta/compõe features.
 
 ## Convenções de Git
 
@@ -181,6 +185,8 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | ✅ ATP-10 | Bootstrap do repositório, README, lint/typecheck, estrutura inicial |
 | ✅ ATP-8 | Design System inicial (tokens, primitivos, catálogo) |
 | ✅ ATP-31 | Auth Firebase no mobile + vínculo/bootstrap de perfil (mock-ready) |
+| ✅ ATP-32 | Correção cadastro Firebase (API key / mensagens) |
+| ✅ ATP-7 | Arquitetura feature-first documentada + Auth como referência |
 | Planejado | Navegação definitiva, perfil de negócio (ATP-29) |
 | Planejado | Integração com `autotrack-api` |
 | Planejado | Módulos (usuários, veículos, manutenções) |

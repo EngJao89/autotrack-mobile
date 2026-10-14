@@ -10,7 +10,10 @@ import {
 import { onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 
 import { getFirebaseSetupMessage, isFirebaseConfigured } from '@/config/env';
-import { bootstrapUserProfile } from '@/services/api/auth';
+import { getFirebaseAuth } from '@/services/firebase';
+
+import { mapFirebaseError } from './mapFirebaseError';
+import { bootstrapUserProfile } from './services/bootstrapProfile';
 import {
   getIdToken,
   registerWithEmail,
@@ -18,11 +21,8 @@ import {
   signInWithGoogleIdToken,
   signOut as authSignOut,
   type AuthCredentials,
-} from '@/services/auth';
-import { getFirebaseAuth } from '@/services/firebase';
-import type { User } from '@/types/user';
-
-import { mapFirebaseError } from './mapFirebaseError';
+} from './services/session';
+import type { User } from './types/user';
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated' | 'unconfigured';
 
