@@ -4,9 +4,9 @@ import { View } from 'react-native';
 import { Link } from 'expo-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { isFirebaseConfigured } from '@/config/env';
+import { getFirebaseSetupMessage, isFirebaseConfigured } from '@/config/env';
 import { Button, Card, Screen, Text, TextInput } from '@/components/ui';
-import { registerSchema, useAuth, type RegisterForm } from '@/features/auth';
+import { mapFirebaseError, registerSchema, useAuth, type RegisterForm } from '@/features/auth';
 import { useAppTheme } from '@/theme';
 
 export default function RegisterScreen() {
@@ -14,6 +14,7 @@ export default function RegisterScreen() {
   const { register, error, clearError } = useAuth();
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+  const firebaseReady = isFirebaseConfigured();
 
   const {
     control,
@@ -27,11 +28,18 @@ export default function RegisterScreen() {
   const onSubmit = handleSubmit(async (values) => {
     setLocalError(null);
     clearError();
+
+    if (!firebaseReady) {
+      setLocalError(getFirebaseSetupMessage());
+      return;
+    }
+
     setSubmitting(true);
     try {
+      // Only email+password go to Firebase Auth — never to autotrack-api.
       await register({ email: values.email, password: values.password });
     } catch (err) {
-      setLocalError(err instanceof Error ? err.message : 'Não foi possível criar a conta');
+      setLocalError(mapFirebaseError(err));
     } finally {
       setSubmitting(false);
     }
@@ -46,6 +54,14 @@ export default function RegisterScreen() {
             O cadastro usa Firebase Authentication. A senha nunca é enviada à autotrack-api.
           </Text>
         </View>
+
+        {!firebaseReady ? (
+          <Card>
+            <Text variant="body" color="warning">
+              {getFirebaseSetupMessage()}
+            </Text>
+          </Card>
+        ) : null}
 
         <Card>
           <View style={{ gap: theme.spacing[16] }}>
@@ -64,6 +80,7 @@ export default function RegisterScreen() {
                   onBlur={onBlur}
                   errorText={errors.email?.message}
                   required
+                  disabled={submitting}
                 />
               )}
             />
@@ -82,6 +99,7 @@ export default function RegisterScreen() {
                   onBlur={onBlur}
                   errorText={errors.password?.message}
                   required
+                  disabled={submitting}
                 />
               )}
             />
@@ -100,6 +118,7 @@ export default function RegisterScreen() {
                   onBlur={onBlur}
                   errorText={errors.confirmPassword?.message}
                   required
+                  disabled={submitting}
                 />
               )}
             />
@@ -114,7 +133,7 @@ export default function RegisterScreen() {
               label="Criar conta"
               onPress={onSubmit}
               loading={submitting}
-              disabled={!isFirebaseConfigured()}
+              disabled={!firebaseReady || submitting}
             />
           </View>
         </Card>

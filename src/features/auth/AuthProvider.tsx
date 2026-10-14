@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 
-import { isFirebaseConfigured } from '@/config/env';
+import { getFirebaseSetupMessage, isFirebaseConfigured } from '@/config/env';
 import { bootstrapUserProfile } from '@/services/api/auth';
 import {
   getIdToken,
@@ -21,6 +21,8 @@ import {
 } from '@/services/auth';
 import { getFirebaseAuth } from '@/services/firebase';
 import type { User } from '@/types/user';
+
+import { mapFirebaseError } from './mapFirebaseError';
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated' | 'unconfigured';
 
@@ -103,8 +105,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = useCallback(
     async (credentials: AuthCredentials) => {
       setError(null);
-      const result = await signInWithEmail(credentials);
-      await completeAuth(result.user);
+      if (!isFirebaseConfigured()) {
+        throw new Error(getFirebaseSetupMessage());
+      }
+      try {
+        const result = await signInWithEmail(credentials);
+        await completeAuth(result.user);
+      } catch (err) {
+        const message = mapFirebaseError(err);
+        setError(message);
+        throw new Error(message);
+      }
     },
     [completeAuth]
   );
@@ -112,8 +123,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = useCallback(
     async (credentials: AuthCredentials) => {
       setError(null);
-      const result = await registerWithEmail(credentials);
-      await completeAuth(result.user);
+      if (!isFirebaseConfigured()) {
+        throw new Error(getFirebaseSetupMessage());
+      }
+      try {
+        const result = await registerWithEmail(credentials);
+        await completeAuth(result.user);
+      } catch (err) {
+        const message = mapFirebaseError(err);
+        setError(message);
+        throw new Error(message);
+      }
     },
     [completeAuth]
   );
@@ -121,8 +141,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signInWithGoogleToken = useCallback(
     async (idToken: string) => {
       setError(null);
-      const result = await signInWithGoogleIdToken(idToken);
-      await completeAuth(result.user);
+      if (!isFirebaseConfigured()) {
+        throw new Error(getFirebaseSetupMessage());
+      }
+      try {
+        const result = await signInWithGoogleIdToken(idToken);
+        await completeAuth(result.user);
+      } catch (err) {
+        const message = mapFirebaseError(err);
+        setError(message);
+        throw new Error(message);
+      }
     },
     [completeAuth]
   );

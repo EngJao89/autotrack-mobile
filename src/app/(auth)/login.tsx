@@ -4,10 +4,11 @@ import { View } from 'react-native';
 import { Link } from 'expo-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { isFirebaseConfigured } from '@/config/env';
+import { getFirebaseSetupMessage, isFirebaseConfigured } from '@/config/env';
 import { Button, Card, Screen, Text, TextInput } from '@/components/ui';
 import {
   emailPasswordSchema,
+  mapFirebaseError,
   useAuth,
   useGoogleSignIn,
   type EmailPasswordForm,
@@ -20,6 +21,7 @@ export default function LoginScreen() {
   const google = useGoogleSignIn();
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+  const firebaseReady = isFirebaseConfigured();
 
   const {
     control,
@@ -33,11 +35,17 @@ export default function LoginScreen() {
   const onSubmit = handleSubmit(async (values) => {
     setLocalError(null);
     clearError();
+
+    if (!firebaseReady) {
+      setLocalError(getFirebaseSetupMessage());
+      return;
+    }
+
     setSubmitting(true);
     try {
       await signIn(values);
     } catch (err) {
-      setLocalError(err instanceof Error ? err.message : 'Não foi possível entrar');
+      setLocalError(mapFirebaseError(err));
     } finally {
       setSubmitting(false);
     }
@@ -53,11 +61,10 @@ export default function LoginScreen() {
           </Text>
         </View>
 
-        {!isFirebaseConfigured() || status === 'unconfigured' ? (
+        {!firebaseReady || status === 'unconfigured' ? (
           <Card>
             <Text variant="body" color="warning">
-              Configure as variáveis EXPO_PUBLIC_FIREBASE_* no arquivo .env para habilitar a
-              autenticação. Veja docs/auth.md.
+              {getFirebaseSetupMessage()}
             </Text>
           </Card>
         ) : null}
@@ -79,6 +86,7 @@ export default function LoginScreen() {
                   onBlur={onBlur}
                   errorText={errors.email?.message}
                   required
+                  disabled={submitting}
                 />
               )}
             />
@@ -97,6 +105,7 @@ export default function LoginScreen() {
                   onBlur={onBlur}
                   errorText={errors.password?.message}
                   required
+                  disabled={submitting}
                 />
               )}
             />
@@ -111,7 +120,7 @@ export default function LoginScreen() {
               label="Entrar"
               onPress={onSubmit}
               loading={submitting}
-              disabled={!isFirebaseConfigured()}
+              disabled={!firebaseReady || submitting}
             />
 
             <Button
@@ -119,7 +128,7 @@ export default function LoginScreen() {
               variant="secondary"
               onPress={google.promptGoogleSignIn}
               loading={google.pending}
-              disabled={!isFirebaseConfigured() || !google.ready}
+              disabled={!firebaseReady || !google.ready || submitting}
             />
 
             <Text variant="caption" color="secondary">

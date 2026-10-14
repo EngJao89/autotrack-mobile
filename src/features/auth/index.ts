@@ -1,4 +1,5 @@
 export { AuthProvider, useAuth, type AuthStatus } from './AuthProvider';
+export { mapFirebaseError } from './mapFirebaseError';
 export {
   emailPasswordSchema,
   registerSchema,

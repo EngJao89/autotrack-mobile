@@ -72,7 +72,7 @@ npm run web
 | `npm run typecheck` | Verifica tipos com TypeScript (`tsc --noEmit`) |
 | `npm run commit` | Abre o assistente Commitizen (Conventional Commits) |
 
-> **Testes unitários:** script `test` ainda não configurado (planejado). Não há comando de teste prometido neste README.
+> **Testes:** `npm test` roda checagens com `node:test` (config Firebase e mapeamento de erros de auth). Cobertura de UI/E2E ainda planejada.
 
 ## Estrutura do projeto
 

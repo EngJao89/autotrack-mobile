@@ -5,31 +5,52 @@
 
 import { Platform } from 'react-native';
 
+import {
+  getFirebaseConfigErrorMessage,
+  validateFirebaseClientConfig,
+  type FirebaseConfigIssue,
+} from './firebaseConfig';
+
+function readPublic(value: string | undefined): string {
+  return (value ?? '').trim().replace(/^['"]|['"]$/g, '');
+}
+
 export const env = {
-  appEnv: process.env.EXPO_PUBLIC_APP_ENV?.trim() || 'development',
-  apiUrl: process.env.EXPO_PUBLIC_API_URL?.trim() || '',
+  appEnv: readPublic(process.env.EXPO_PUBLIC_APP_ENV) || 'development',
+  apiUrl: readPublic(process.env.EXPO_PUBLIC_API_URL),
   /** When true, profile bootstrap uses a local mock if the API is unavailable. */
-  apiMock: (process.env.EXPO_PUBLIC_API_MOCK?.trim() || 'true') === 'true',
+  apiMock: (readPublic(process.env.EXPO_PUBLIC_API_MOCK) || 'true') === 'true',
   firebase: {
-    apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY?.trim() || '',
-    authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN?.trim() || '',
-    projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID?.trim() || '',
-    storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET?.trim() || '',
-    messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID?.trim() || '',
-    appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID?.trim() || '',
+    apiKey: readPublic(process.env.EXPO_PUBLIC_FIREBASE_API_KEY),
+    authDomain: readPublic(process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN),
+    projectId: readPublic(process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID),
+    storageBucket: readPublic(process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET),
+    messagingSenderId: readPublic(process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID),
+    appId: readPublic(process.env.EXPO_PUBLIC_FIREBASE_APP_ID),
   },
   google: {
     /** Web client ID from Google Cloud / Firebase (used by AuthSession + Firebase). */
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim() || '',
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim() || '',
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID?.trim() || '',
+    webClientId: readPublic(process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID),
+    iosClientId: readPublic(process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID),
+    androidClientId: readPublic(process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID),
   },
 } as const;
 
+export function getFirebaseConfigIssues(): FirebaseConfigIssue[] {
+  return validateFirebaseClientConfig(env.firebase);
+}
+
+/** True only when Firebase Web client config passes shape validation. */
 export function isFirebaseConfigured(): boolean {
-  return Boolean(
-    env.firebase.apiKey && env.firebase.authDomain && env.firebase.projectId && env.firebase.appId
-  );
+  return getFirebaseConfigIssues().length === 0;
+}
+
+export function getFirebaseSetupMessage(): string {
+  const issues = getFirebaseConfigIssues();
+  if (issues.length === 0) {
+    return 'Firebase configurado.';
+  }
+  return getFirebaseConfigErrorMessage(issues);
 }
 
 /** True when the platform-specific Google OAuth client ID is available. */
