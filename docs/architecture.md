@@ -150,6 +150,7 @@ O script analisa imports `@/` em `src/` e falha se:
 
 ## Relacionados
 
-- Log de movimentações desta tarefa: `docs/architecture-moves.md`
+- ADRs: [`docs/adr/README.md`](./adr/README.md)
+- Log de movimentações (ATP-7): `docs/architecture-moves.md`
 - Auth Firebase / identidade: `docs/auth.md`
 - Design System: `docs/design-system.md`
