@@ -7,6 +7,10 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added
+
+- Índice e template de ADRs em `docs/adr/`, com três decisões prioritárias (Firebase, persistência na API, fronteira API/Mobile) (`ATP-4`)
+
 ### Changed
 
 - Consolidação feature-first: Auth como módulo de referência, rotas finas, `docs/architecture.md` e `npm run check:deps` (`ATP-7`)

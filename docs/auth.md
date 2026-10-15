@@ -4,6 +4,8 @@ Camada de identidade do app Expo (ATP-31), alinhada ao contrato da `autotrack-ap
 
 ## Decisão de arquitetura
 
+Registrada formalmente em [ADR 0001](./adr/0001-firebase-identity-provider.md) e [ADR 0003](./adr/0003-api-mobile-boundary.md).
+
 1. O app autentica no **Firebase Authentication** (Google ou e-mail/senha).
 2. O Firebase emite um **ID Token**.
 3. O app chama a API com `Authorization: Bearer <firebase-id-token>`.

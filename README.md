@@ -4,7 +4,7 @@ Aplicativo mobile do **AutoTrack** — acompanhamento de veículos e manutençõ
 
 Este repositório é a base do app cliente (Expo / React Native / TypeScript). Ele consome a API backend [`autotrack-api`](https://github.com/EngJao89/autotrack-api).
 
-> **Status:** `Unreleased`. Arquitetura feature-first documentada — ver [docs/architecture.md](./docs/architecture.md). Design System e autenticação Firebase: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).
+> **Status:** `Unreleased`. Arquitetura feature-first: [docs/architecture.md](./docs/architecture.md). Decisões (ADR): [docs/adr/README.md](./docs/adr/README.md). Design System e auth: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).
 
 ## Stack inicial
 
@@ -82,6 +82,7 @@ npm run web
 autotrack-mobile/
 ├── assets/
 ├── docs/
+│   ├── adr/                # Architecture Decision Records (ATP-4)
 │   ├── architecture.md     # Feature-first (ATP-7)
 │   ├── auth.md
 │   └── design-system.md
@@ -106,6 +107,7 @@ autotrack-mobile/
 ```
 
 Convenções e limites: [docs/architecture.md](./docs/architecture.md).  
+ADRs (Firebase, persistência, fronteira API/Mobile): [docs/adr/README.md](./docs/adr/README.md).  
 Catálogo visual: rota `/design-system` (aba **UI Kit**).  
 Features futuras (perfil, veículos, manutenções) têm limites documentados — **sem** pastas vazias nesta fase.
 
@@ -187,6 +189,7 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | ✅ ATP-31 | Auth Firebase no mobile + vínculo/bootstrap de perfil (mock-ready) |
 | ✅ ATP-32 | Correção cadastro Firebase (API key / mensagens) |
 | ✅ ATP-7 | Arquitetura feature-first documentada + Auth como referência |
+| ✅ ATP-4 | ADRs iniciais (Firebase, persistência na API, fronteira REST `/v1`) |
 | Planejado | Navegação definitiva, perfil de negócio (ATP-29) |
 | Planejado | Integração com `autotrack-api` |
 | Planejado | Módulos (usuários, veículos, manutenções) |
