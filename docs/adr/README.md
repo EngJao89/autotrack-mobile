@@ -29,6 +29,7 @@ Numeração é **independente** por repositório. Referências cruzadas usam:
 | 0001 | Firebase Authentication como provedor de identidade | Aceito | Transversal | [0001-firebase-identity-provider.md](./0001-firebase-identity-provider.md) |
 | 0002 | Persistência de negócio na API (não no mobile) | Aceito | Transversal | [0002-persistence-owned-by-api.md](./0002-persistence-owned-by-api.md) |
 | 0003 | Fronteira API/Mobile: REST `/v1` e contratos | Aceito | Transversal | [0003-api-mobile-boundary.md](./0003-api-mobile-boundary.md) |
+| 0004 | Zustand para estado cliente compartilhado | Aceito | Mobile | [0004-zustand-client-state.md](./0004-zustand-client-state.md) |
 
 ## Decisões transversais (outros repositórios)
 
@@ -42,7 +43,7 @@ Numeração é **independente** por repositório. Referências cruzadas usam:
 
 Estes temas existem no produto, mas **não** estão registrados como ADR `Aceito` nesta entrega:
 
-- Estratégia definitiva de state management no mobile
+- Cache remoto definitivo (TanStack Query ou equivalente) — ver [0004](./0004-zustand-client-state.md) e [`../state-management.md`](../state-management.md)
 - Navegação definitiva (além do Expo Router atual)
 - Geração de cliente TypeScript a partir de OpenAPI
 - ADR formal de feature-first (hoje coberto por [`../architecture.md`](../architecture.md); promover a ADR quando estabilizar)
@@ -52,5 +53,6 @@ Estes temas existem no produto, mas **não** estão registrados como ADR `Aceito
 | Doc | Papel |
 | --- | --- |
 | [`../architecture.md`](../architecture.md) | Guia feature-first e limites de módulo (ATP-7) |
+| [`../state-management.md`](../state-management.md) | Ownership de estado, políticas e PoC (ATP-3) |
 | [`../auth.md`](../auth.md) | Como configurar e usar auth no app (ATP-31/32) |
 | [`../design-system.md`](../design-system.md) | Tokens e primitivos UI (ATP-8) |

@@ -9,6 +9,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Estratégia de gerenciamento de estado com Zustand: `sessionStore`, PoC de perfil autenticado, limpeza no logout, docs e ADR 0004 (`ATP-3`)
 - Índice e template de ADRs em `docs/adr/`, com três decisões prioritárias (Firebase, persistência na API, fronteira API/Mobile) (`ATP-4`)
 
 ### Changed

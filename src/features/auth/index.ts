@@ -18,4 +18,5 @@ export { LoginScreen } from './screens/LoginScreen';
 export { RegisterScreen } from './screens/RegisterScreen';
 export { SessionHomeScreen } from './screens/SessionHomeScreen';
 export type { AuthCredentials } from './services/session';
+export { useSessionStore, type ProfileStatus } from './store/sessionStore';
 export type { User, UserProfileUpdate } from './types/user';
