@@ -4,7 +4,7 @@ Aplicativo mobile do **AutoTrack** — acompanhamento de veículos e manutençõ
 
 Este repositório é a base do app cliente (Expo / React Native / TypeScript). Ele consome a API backend [`autotrack-api`](https://github.com/EngJao89/autotrack-api).
 
-> **Status:** `Unreleased`. Arquitetura feature-first: [docs/architecture.md](./docs/architecture.md). Decisões (ADR): [docs/adr/README.md](./docs/adr/README.md). Design System e auth: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).
+> **Status:** `Unreleased`. Arquitetura feature-first: [docs/architecture.md](./docs/architecture.md). Estado (Zustand): [docs/state-management.md](./docs/state-management.md). Decisões (ADR): [docs/adr/README.md](./docs/adr/README.md). Design System e auth: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).
 
 ## Stack inicial
 
@@ -14,6 +14,7 @@ Este repositório é a base do app cliente (Expo / React Native / TypeScript). E
 | [React Native](https://reactnative.dev) | UI nativa multiplataforma |
 | [TypeScript](https://www.typescriptlang.org) | Tipagem estática |
 | [Expo Router](https://docs.expo.dev/router/introduction/) | Rotas baseadas em arquivos (`src/app/`) |
+| [Zustand](https://zustand.docs.pmnd.rs/) | Estado cliente compartilhado (perfil/sessão local) |
 | npm | Gerenciador de pacotes (fixado via `package-lock.json`) |
 
 ## Pré-requisitos
@@ -74,7 +75,7 @@ npm run web
 | `npm run check:deps` | Valida limites de import feature-first |
 | `npm run commit` | Abre o assistente Commitizen (Conventional Commits) |
 
-> **Testes:** `npm test` cobre config Firebase e mapeamento de erros de auth. UI/E2E ainda planejada.
+> **Testes:** `npm test` cobre config Firebase, erros de auth e isolamento do `sessionStore` (Zustand). UI/E2E ainda planejada.
 
 ## Estrutura do projeto
 
@@ -84,6 +85,7 @@ autotrack-mobile/
 ├── docs/
 │   ├── adr/                # Architecture Decision Records (ATP-4)
 │   ├── architecture.md     # Feature-first (ATP-7)
+│   ├── state-management.md # Ownership de estado (ATP-3)
 │   ├── auth.md
 │   └── design-system.md
 ├── scripts/
@@ -107,7 +109,8 @@ autotrack-mobile/
 ```
 
 Convenções e limites: [docs/architecture.md](./docs/architecture.md).  
-ADRs (Firebase, persistência, fronteira API/Mobile): [docs/adr/README.md](./docs/adr/README.md).  
+ADRs (Firebase, persistência, fronteira API/Mobile, Zustand): [docs/adr/README.md](./docs/adr/README.md).  
+Estado cliente: [docs/state-management.md](./docs/state-management.md).  
 Catálogo visual: rota `/design-system` (aba **UI Kit**).  
 Features futuras (perfil, veículos, manutenções) têm limites documentados — **sem** pastas vazias nesta fase.
 
@@ -190,6 +193,7 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | ✅ ATP-32 | Correção cadastro Firebase (API key / mensagens) |
 | ✅ ATP-7 | Arquitetura feature-first documentada + Auth como referência |
 | ✅ ATP-4 | ADRs iniciais (Firebase, persistência na API, fronteira REST `/v1`) |
+| ✅ ATP-3 | Estratégia de estado (Zustand + PoC de perfil / isolamento de sessão) |
 | Planejado | Navegação definitiva, perfil de negócio (ATP-29) |
 | Planejado | Integração com `autotrack-api` |
 | Planejado | Módulos (usuários, veículos, manutenções) |

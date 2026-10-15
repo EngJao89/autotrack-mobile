@@ -7,7 +7,7 @@ Documento da ATP-7. Define limites de módulo, direção de dependências e o ex
 | Área | Caminho | Responsabilidade |
 | --- | --- | --- |
 | Rotas | `src/app/` | Expo Router: layouts, params, composição de providers e telas |
-| Auth (feature) | `src/features/auth/` | Sessão Firebase, login/registro, bootstrap de perfil, guard de rota |
+| Auth (feature) | `src/features/auth/` | Sessão Firebase, login/registro, bootstrap de perfil (Zustand), guard de rota |
 | Design System | `src/components/ui/` | Primitivos tipados (Button, Text, Screen, …) |
 | Tema | `src/theme/` | Tokens + `AppThemeProvider` |
 | Config | `src/config/` | Leitura/validação de `EXPO_PUBLIC_*` |
@@ -44,6 +44,7 @@ src/
 │       ├── screens/
 │       ├── hooks/
 │       ├── services/         # Operações de domínio (usam infra)
+│       ├── store/            # Zustand (estado cliente da feature)
 │       ├── types/
 │       ├── AuthProvider.tsx
 │       ├── AuthGate.tsx
@@ -63,10 +64,11 @@ Subpastas só com código real. **Não** criar pastas vazias para perfil/veícul
 ### Limite
 
 - Sessão Firebase (e-mail/senha, Google via AuthSession)
-- Estado de autenticação (`AuthProvider` / `useAuth`)
-- Coordenação do bootstrap de perfil local (`POST /v1/auth/bootstrap` ou mock)
+- Estado de autenticação (`AuthProvider` / `useAuth`) — ciclo Firebase no Context
+- Bootstrap de perfil no Zustand (`store/sessionStore`) com limpeza no logout
 - Telas de login/registro e home temporária de sessão
 - Guard de navegação (`AuthGate`)
+- Estratégia de estado: [state-management.md](./state-management.md) / [ADR 0004](./adr/0004-zustand-client-state.md)
 
 ### Fora do limite de Auth
 
@@ -79,6 +81,7 @@ Subpastas só com código real. **Não** criar pastas vazias para perfil/veícul
 | Export | Uso externo |
 | --- | --- |
 | `AuthProvider`, `AuthGate`, `useAuth` | Root layout / composição |
+| `useSessionStore`, `ProfileStatus` | Slice de perfil / limpeza de sessão |
 | `LoginScreen`, `RegisterScreen`, `SessionHomeScreen` | Rotas |
 | `mapFirebaseError`, schemas | Formulários / testes |
 | `User`, `UserProfileUpdate`, `AuthCredentials` | Contratos tipados |

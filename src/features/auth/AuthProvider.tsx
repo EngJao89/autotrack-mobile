@@ -22,16 +22,23 @@ import {
   signOut as authSignOut,
   type AuthCredentials,
 } from './services/session';
+import { useSessionStore, type ProfileStatus } from './store/sessionStore';
 import type { User } from './types/user';
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated' | 'unconfigured';
 
 type AuthContextValue = {
+  /** Firebase session cycle (independent of profile bootstrap). */
   status: AuthStatus;
   firebaseUser: FirebaseUser | null;
-  profile: User | null;
+  /** Form / auth-action errors (not profile bootstrap errors). */
   error: string | null;
+  /** Profile slice — also available via `useSessionStore`. */
+  profile: User | null;
+  profileStatus: ProfileStatus;
+  profileError: string | null;
   isMockProfile: boolean;
+  selectedVehicleId: string | null;
   signIn: (credentials: AuthCredentials) => Promise<void>;
   register: (credentials: AuthCredentials) => Promise<void>;
   signInWithGoogleToken: (idToken: string) => Promise<void>;
@@ -52,14 +59,34 @@ async function syncProfile(
   return { profile, mocked };
 }
 
+async function loadSessionProfile(firebaseUser: FirebaseUser): Promise<void> {
+  const identityKey = firebaseUser.uid;
+  const requestId = useSessionStore.getState().beginProfileLoad(identityKey);
+
+  try {
+    const synced = await syncProfile(firebaseUser);
+    useSessionStore
+      .getState()
+      .setProfileReady(requestId, identityKey, synced.profile, synced.mocked);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Falha ao sincronizar perfil';
+    useSessionStore.getState().setProfileError(requestId, identityKey, message);
+    // Policy (ATP-3): profile sync failure does NOT revoke Firebase authentication.
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<AuthStatus>(() =>
     isFirebaseConfigured() ? 'loading' : 'unconfigured'
   );
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-  const [profile, setProfile] = useState<User | null>(null);
-  const [isMockProfile, setIsMockProfile] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const profile = useSessionStore((s) => s.profile);
+  const profileStatus = useSessionStore((s) => s.profileStatus);
+  const profileError = useSessionStore((s) => s.profileError);
+  const isMockProfile = useSessionStore((s) => s.isMockProfile);
+  const selectedVehicleId = useSessionStore((s) => s.selectedVehicleId);
 
   useEffect(() => {
     if (!isFirebaseConfigured()) {
@@ -67,39 +94,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const unsubscribe = onAuthStateChanged(getFirebaseAuth(), async (user) => {
-      setFirebaseUser(user);
       setError(null);
 
       if (!user) {
-        setProfile(null);
-        setIsMockProfile(false);
+        useSessionStore.getState().clearSessionClientState();
+        setFirebaseUser(null);
         setStatus('unauthenticated');
         return;
       }
 
-      try {
-        const synced = await syncProfile(user);
-        setProfile(synced.profile);
-        setIsMockProfile(synced.mocked);
-        setStatus('authenticated');
-      } catch (err) {
-        setProfile(null);
-        setIsMockProfile(false);
-        setStatus('unauthenticated');
-        setError(err instanceof Error ? err.message : 'Falha ao sincronizar perfil');
-        await authSignOut().catch(() => undefined);
+      const previousIdentity = useSessionStore.getState().identityKey;
+      if (previousIdentity && previousIdentity !== user.uid) {
+        useSessionStore.getState().clearSessionClientState();
       }
+
+      setFirebaseUser(user);
+      setStatus('authenticated');
+      await loadSessionProfile(user);
     });
 
     return unsubscribe;
   }, []);
 
   const completeAuth = useCallback(async (credentialUser: FirebaseUser) => {
-    const synced = await syncProfile(credentialUser);
+    const previousIdentity = useSessionStore.getState().identityKey;
+    if (previousIdentity && previousIdentity !== credentialUser.uid) {
+      useSessionStore.getState().clearSessionClientState();
+    }
+
     setFirebaseUser(credentialUser);
-    setProfile(synced.profile);
-    setIsMockProfile(synced.mocked);
     setStatus('authenticated');
+    await loadSessionProfile(credentialUser);
   }, []);
 
   const signIn = useCallback(
@@ -158,18 +183,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = useCallback(async () => {
     setError(null);
+    useSessionStore.getState().clearSessionClientState();
     await authSignOut();
     setFirebaseUser(null);
-    setProfile(null);
-    setIsMockProfile(false);
     setStatus('unauthenticated');
   }, []);
 
   const refreshProfile = useCallback(async () => {
     if (!firebaseUser) return;
-    const synced = await syncProfile(firebaseUser);
-    setProfile(synced.profile);
-    setIsMockProfile(synced.mocked);
+    useSessionStore.getState().invalidateProfile();
+    await loadSessionProfile(firebaseUser);
   }, [firebaseUser]);
 
   const getAccessToken = useCallback(
@@ -184,9 +207,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       status,
       firebaseUser,
-      profile,
       error,
+      profile,
+      profileStatus,
+      profileError,
       isMockProfile,
+      selectedVehicleId,
       signIn,
       register,
       signInWithGoogleToken,
@@ -198,9 +224,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [
       status,
       firebaseUser,
-      profile,
       error,
+      profile,
+      profileStatus,
+      profileError,
       isMockProfile,
+      selectedVehicleId,
       signIn,
       register,
       signInWithGoogleToken,

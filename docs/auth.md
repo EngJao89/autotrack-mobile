@@ -71,12 +71,13 @@ Veja `.env.example`. Todas as chaves do cliente usam prefixo `EXPO_PUBLIC_`.
 | Caminho | Responsabilidade |
 | --- | --- |
 | `src/services/firebase.ts` | Init Firebase + persistência AsyncStorage |
-| `src/services/auth.ts` | E-mail/senha e credential Google |
 | `src/services/api/client.ts` | HTTP + Bearer |
-| `src/services/api/auth.ts` | Bootstrap `/v1/auth/bootstrap` (fallback `/v1/users/me` + mock) |
+| `src/features/auth/services/session.ts` | E-mail/senha e credential Google |
+| `src/features/auth/services/bootstrapProfile.ts` | Bootstrap `/v1/auth/bootstrap` (fallback `/v1/users/me` + mock) |
+| `src/features/auth/store/sessionStore.ts` | Zustand: perfil + limpeza de sessão (ATP-3) |
 | `src/features/auth/` | AuthProvider, formulários, Google AuthSession |
 | `src/app/(auth)/` | Login e registro |
-| `src/types/user.ts` | Modelo `User` (sem senha; `firebaseUid` só leitura) |
+| `src/features/auth/types/user.ts` | Modelo `User` (sem senha; `firebaseUid` só leitura) |
 
 ## Google Sign-In no Expo
 
