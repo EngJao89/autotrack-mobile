@@ -1,0 +1,20 @@
+{
+  "taskId": "ATP-34",
+  "title": "Consolidar integração Notion no Mobile: consultar tasks, detalhes e gerar branch",
+  "status": "In progress",
+  "tipo": "Feature",
+  "priority": "Média",
+  "estimate": "M",
+  "tags": ["Git", "TypeScript", "Arquitetura", "Testes", "Segurança"],
+  "url": "https://www.notion.so/…(redacted)",
+  "missingProperties": [],
+  "acceptanceCriteria": [
+    "[ ] Mecanismo e localização da integração existente identificados no repositório.",
+    "[ ] Consulta retorna tasks autorizadas sem presumir campos inexistentes.",
+    "[ ] É possível selecionar uma task e acessar seu conteúdo e critérios de aceite.",
+    "[ ] ID usado na branch corresponde ao valor oficial do Notion.",
+    "[ ] Nome gerado respeita tipo, ID e slug válido para títulos com acentos/caracteres especiais.",
+    "[ ] Sugerir nome e criar branch Git são comportamentos diferenciados na documentação."
+  ],
+  "_note": "Exemplo sanitizado — sem tokens. Gerado como evidência ATP-34; valores reais vêm de `npm run notion:show -- ATP-34` com NOTION_TOKEN local."
+}

@@ -9,6 +9,8 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Tooling Notion no Mobile: CLI para listar/mostrar tasks, sugerir ou criar branch local, docs e testes (`ATP-34`)
+- Esquema Notion Link Preview + template de PR com vínculo ATP (`docs/notion-github.md`)
 - Estratégia de gerenciamento de estado com Zustand: `sessionStore`, PoC de perfil autenticado, limpeza no logout, docs e ADR 0004 (`ATP-3`)
 - Índice e template de ADRs em `docs/adr/`, com três decisões prioritárias (Firebase, persistência na API, fronteira API/Mobile) (`ATP-4`)
 
