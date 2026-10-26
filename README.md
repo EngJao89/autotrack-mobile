@@ -72,10 +72,15 @@ npm run web
 | `npm run lint` | Executa o ESLint |
 | `npm run typecheck` | Verifica tipos com TypeScript (`tsc --noEmit`) |
 | `npm test` | Testes unitários (`node:test`) |
+| `npm run notion:list` | Lista tasks do board Notion (requer `NOTION_TOKEN`) |
+| `npm run notion:show` | Detalhes + critérios de aceite de uma task |
+| `npm run notion:suggest-branch` | Sugere nome de branch (não altera git) |
+| `npm run notion:create-branch` | Cria branch local (sem push; não escreve no Notion) |
 | `npm run check:deps` | Valida limites de import feature-first |
 | `npm run commit` | Abre o assistente Commitizen (Conventional Commits) |
 
-> **Testes:** `npm test` cobre config Firebase, erros de auth e isolamento do `sessionStore` (Zustand). UI/E2E ainda planejada.
+> **Testes:** `npm test` cobre config Firebase, auth, `sessionStore` e geração de branch Notion. UI/E2E ainda planejada.  
+> Workflow Notion (ATP-34): [docs/notion-task-workflow.md](./docs/notion-task-workflow.md).
 
 ## Estrutura do projeto
 
@@ -86,9 +91,12 @@ autotrack-mobile/
 │   ├── adr/                # Architecture Decision Records (ATP-4)
 │   ├── architecture.md     # Feature-first (ATP-7)
 │   ├── state-management.md # Ownership de estado (ATP-3)
+│   ├── notion-task-workflow.md  # CLI Notion → branch (ATP-34)
+│   ├── notion-github.md         # Link Preview / convenções
 │   ├── auth.md
 │   └── design-system.md
 ├── scripts/
+│   ├── notion/             # Tooling Notion (ATP-34)
 │   └── check-feature-deps.mjs
 ├── src/
 │   ├── app/                # Rotas finas (Expo Router)
@@ -146,8 +154,12 @@ Use `npm run commit` para gerar a mensagem com Commitizen.
 1. Crie a branch a partir de `main` (ou da branch base do fluxo atual).
 2. Implemente a mudança com commits pequenos e descritivos.
 3. Rode `npm run lint` e `npm run typecheck` antes de abrir o PR.
-4. Descreva motivação, escopo e plano de teste no PR.
-5. Solicite review conforme o fluxo do time.
+4. Descreva motivação, escopo e plano de teste no PR (use o template em `.github/pull_request_template.md`).
+5. Inclua `[ATP-XX]` no título do PR para vínculo com o board Notion.
+6. Solicite review conforme o fluxo do time.
+
+Board Notion (Link Preview): [docs/notion-github.md](./docs/notion-github.md).  
+Consultar tasks / gerar branch: [docs/notion-task-workflow.md](./docs/notion-task-workflow.md).
 
 ## Variáveis de ambiente
 
@@ -194,6 +206,7 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | ✅ ATP-7 | Arquitetura feature-first documentada + Auth como referência |
 | ✅ ATP-4 | ADRs iniciais (Firebase, persistência na API, fronteira REST `/v1`) |
 | ✅ ATP-3 | Estratégia de estado (Zustand + PoC de perfil / isolamento de sessão) |
+| ✅ ATP-34 | Tooling Notion: consultar tasks, detalhes e gerar/criar branch |
 | Planejado | Navegação definitiva, perfil de negócio (ATP-29) |
 | Planejado | Integração com `autotrack-api` |
 | Planejado | Módulos (usuários, veículos, manutenções) |

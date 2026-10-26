@@ -14,7 +14,11 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test src/config/firebaseConfig.test.ts src/features/auth/mapFirebaseError.test.ts src/features/auth/store/sessionStore.test.ts",
+    "test": "node --import tsx --test src/config/firebaseConfig.test.ts src/features/auth/mapFirebaseError.test.ts src/features/auth/store/sessionStore.test.ts scripts/notion/branchName.test.mjs scripts/notion/mapProperties.test.mjs scripts/notion/gitBranch.test.mjs",
+    "notion:list": "node scripts/notion/cli.mjs list",
+    "notion:show": "node scripts/notion/cli.mjs show",
+    "notion:suggest-branch": "node scripts/notion/cli.mjs suggest-branch",
+    "notion:create-branch": "node scripts/notion/cli.mjs create-branch",
     "check:deps": "node scripts/check-feature-deps.mjs",
     "reset-project": "node ./scripts/reset-project.js",
     "commit": "cz"
