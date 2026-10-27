@@ -9,6 +9,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Escopo do MVP e critérios de aceite, com auditoria Mobile/API e rastreabilidade de backlog (`ATP-6`)
 - Tooling Notion no Mobile: CLI para listar/mostrar tasks, sugerir ou criar branch local, docs e testes (`ATP-34`)
 - Esquema Notion Link Preview + template de PR com vínculo ATP (`docs/notion-github.md`)
 - Estratégia de gerenciamento de estado com Zustand: `sessionStore`, PoC de perfil autenticado, limpeza no logout, docs e ADR 0004 (`ATP-3`)

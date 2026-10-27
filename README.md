@@ -6,6 +6,7 @@ Este repositório é a base do app cliente (Expo / React Native / TypeScript). E
 
 > **Status:** `Unreleased`. Arquitetura feature-first: [docs/architecture.md](./docs/architecture.md). Estado (Zustand): [docs/state-management.md](./docs/state-management.md). Decisões (ADR): [docs/adr/README.md](./docs/adr/README.md). Design System e auth: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).  
 > Fronteira API ↔ Mobile (canônica na API, ATP-13): [autotrack-api `docs/api-mobile-boundary.md`](https://github.com/EngJao89/autotrack-api/blob/master/docs/api-mobile-boundary.md).
+> **Status:** `Unreleased`. Escopo do MVP: [docs/mvp-scope.md](./docs/mvp-scope.md). Arquitetura feature-first: [docs/architecture.md](./docs/architecture.md). Estado (Zustand): [docs/state-management.md](./docs/state-management.md). Decisões (ADR): [docs/adr/README.md](./docs/adr/README.md). Design System e auth: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).
 
 ## Stack inicial
 
@@ -92,6 +93,7 @@ autotrack-mobile/
 │   ├── adr/                # Architecture Decision Records (ATP-4)
 │   ├── architecture.md     # Feature-first (ATP-7)
 │   ├── state-management.md # Ownership de estado (ATP-3)
+│   ├── mvp-scope.md             # Escopo MVP + aceite (ATP-6)
 │   ├── notion-task-workflow.md  # CLI Notion → branch (ATP-34)
 │   ├── notion-github.md         # Link Preview / convenções
 │   ├── auth.md
@@ -208,9 +210,9 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | ✅ ATP-4 | ADRs iniciais (Firebase, persistência na API, fronteira REST `/v1`) |
 | ✅ ATP-3 | Estratégia de estado (Zustand + PoC de perfil / isolamento de sessão) |
 | ✅ ATP-34 | Tooling Notion: consultar tasks, detalhes e gerar/criar branch |
-| Planejado | Navegação definitiva, perfil de negócio (ATP-29) |
-| Planejado | Integração com `autotrack-api` |
-| Planejado | Módulos (usuários, veículos, manutenções) |
+| ✅ ATP-6 | Escopo do MVP e critérios de aceite documentados |
+| Planejado | Features Mobile: perfil, veículos, manutenções (jornadas do MVP) |
+| Planejado | Navegação definitiva, integração API real na demo |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
 
 ## Licença
