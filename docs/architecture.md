@@ -2,6 +2,8 @@
 
 Documento da ATP-7. Define limites de módulo, direção de dependências e o exemplo concreto **auth**.
 
+Escopo de produto do MVP (jornadas e aceite): [mvp-scope.md](./mvp-scope.md) (ATP-6).
+
 ## Inventário (estado atual)
 
 | Área | Caminho | Responsabilidade |
