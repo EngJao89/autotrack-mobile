@@ -45,7 +45,8 @@ Estes temas existem no produto, mas **não** estão registrados como ADR `Aceito
 
 - Cache remoto definitivo (TanStack Query ou equivalente) — ver [0004](./0004-zustand-client-state.md) e [`../state-management.md`](../state-management.md)
 - Navegação definitiva (além do Expo Router atual)
-- Geração de cliente TypeScript a partir de OpenAPI
+- Geração de cliente TypeScript a partir de OpenAPI — plano na API ([ATP-12](https://github.com/EngJao89/autotrack-api/blob/master/docs/openapi-client-plan.md))
+- Integração ponta a ponta veículos/manutenções — fronteira documentada em [api-mobile-boundary.md](https://github.com/EngJao89/autotrack-api/blob/master/docs/api-mobile-boundary.md) (ATP-13)
 - ADR formal de feature-first (hoje coberto por [`../architecture.md`](../architecture.md); promover a ADR quando estabilizar)
 
 ## Documentação relacionada (não-ADR)

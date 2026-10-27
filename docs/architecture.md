@@ -100,6 +100,7 @@ export default LoginScreen;
 - Transporte HTTP: `src/services/api/client.ts`
 - Firebase init: `src/services/firebase.ts`
 - Bootstrap com mock: `features/auth/services/bootstrapProfile.ts` quando `EXPO_PUBLIC_API_MOCK=true` — **não** é integração de produção; documentado em `docs/auth.md`
+- Fronteira canônica com a API (responsabilidades, ownership, lacunas): [autotrack-api `docs/api-mobile-boundary.md`](https://github.com/EngJao89/autotrack-api/blob/master/docs/api-mobile-boundary.md) (ATP-13)
 
 ## Limites futuros (sem implementação)
 
