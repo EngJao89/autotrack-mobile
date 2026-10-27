@@ -4,9 +4,8 @@ Aplicativo mobile do **AutoTrack** — acompanhamento de veículos e manutençõ
 
 Este repositório é a base do app cliente (Expo / React Native / TypeScript). Ele consome a API backend [`autotrack-api`](https://github.com/EngJao89/autotrack-api).
 
-> **Status:** `Unreleased`. Arquitetura feature-first: [docs/architecture.md](./docs/architecture.md). Estado (Zustand): [docs/state-management.md](./docs/state-management.md). Decisões (ADR): [docs/adr/README.md](./docs/adr/README.md). Design System e auth: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).  
+> **Status:** `Unreleased`. Escopo do MVP: [docs/mvp-scope.md](./docs/mvp-scope.md). Arquitetura feature-first: [docs/architecture.md](./docs/architecture.md). Estado (Zustand): [docs/state-management.md](./docs/state-management.md). Decisões (ADR): [docs/adr/README.md](./docs/adr/README.md). Design System e auth: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).  
 > Fronteira API ↔ Mobile (canônica na API, ATP-13): [autotrack-api `docs/api-mobile-boundary.md`](https://github.com/EngJao89/autotrack-api/blob/master/docs/api-mobile-boundary.md).
-> **Status:** `Unreleased`. Escopo do MVP: [docs/mvp-scope.md](./docs/mvp-scope.md). Arquitetura feature-first: [docs/architecture.md](./docs/architecture.md). Estado (Zustand): [docs/state-management.md](./docs/state-management.md). Decisões (ADR): [docs/adr/README.md](./docs/adr/README.md). Design System e auth: [docs/design-system.md](./docs/design-system.md), [docs/auth.md](./docs/auth.md).
 
 ## Stack inicial
 
