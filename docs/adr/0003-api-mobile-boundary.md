@@ -76,11 +76,12 @@
 
 ## Referências
 
+- Guia operacional canônico (API): [`autotrack-api` `docs/api-mobile-boundary.md`](https://github.com/EngJao89/autotrack-api/blob/master/docs/api-mobile-boundary.md) (ATP-13)
 - `docs/auth.md`, `docs/architecture.md`
 - `.env.example` (`EXPO_PUBLIC_API_URL`, `EXPO_PUBLIC_API_MOCK`)
 - Código: `src/services/api/client.ts`, `src/features/auth/services/bootstrapProfile.ts`
 - API: https://github.com/EngJao89/autotrack-api
-- Tarefas: ATP-4, ATP-10, ATP-31, ATP-30 (API)
+- Tarefas: ATP-4, ATP-10, ATP-13, ATP-31, ATP-30 (API)
 - Relacionados: ADR 0001 (identidade), ADR 0002 (persistência na API)
 
 ## Histórico
