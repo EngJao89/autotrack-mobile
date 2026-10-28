@@ -9,6 +9,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Recuperação de senha via Firebase (`/(auth)/forgot-password`), UX enumeration-safe e retry de bootstrap de perfil sem recriar usuário (`ATP-36`)
 - Escopo do MVP e critérios de aceite, com auditoria Mobile/API e rastreabilidade de backlog (`ATP-6`)
 - Tooling Notion no Mobile: CLI para listar/mostrar tasks, sugerir ou criar branch local, docs e testes (`ATP-34`)
 - Esquema Notion Link Preview + template de PR com vínculo ATP (`docs/notion-github.md`)
@@ -17,6 +18,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Changed
 
+- Login/cadastro: bloqueio de envio duplicado, link “Esqueci minha senha” e feedback de sessão/perfil na home (`ATP-36`)
 - Consolidação feature-first: Auth como módulo de referência, rotas finas, `docs/architecture.md` e `npm run check:deps` (`ATP-7`)
 
 ### Fixed

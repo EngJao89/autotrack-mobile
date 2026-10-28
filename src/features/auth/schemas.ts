@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+/** Aligns with Firebase Email/Password defaults while keeping a slightly stricter floor (8). */
 export const emailPasswordSchema = z.object({
   email: z.email('Informe um e-mail válido'),
   password: z.string().min(8, 'A senha deve ter pelo menos 8 caracteres'),
@@ -17,3 +18,9 @@ export const registerSchema = emailPasswordSchema
   });
 
 export type RegisterForm = z.infer<typeof registerSchema>;
+
+export const forgotPasswordSchema = z.object({
+  email: z.email('Informe um e-mail válido'),
+});
+
+export type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;

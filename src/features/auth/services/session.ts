@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
   signInWithCredential,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
@@ -18,6 +19,9 @@ export type AuthCredentials = {
   email: string;
   password: string;
 };
+
+/** Codes that must not reveal whether an e-mail is registered (password reset). */
+const PASSWORD_RESET_ENUMERATION_CODES = new Set(['auth/user-not-found', 'auth/invalid-email']);
 
 function assertFirebaseReady(): void {
   if (!isFirebaseConfigured()) {
@@ -59,6 +63,30 @@ export async function signOut(): Promise<void> {
     return;
   }
   await firebaseSignOut(getFirebaseAuth());
+}
+
+/**
+ * Sends Firebase password-reset e-mail.
+ * Never reveals whether the address is registered (enumeration-safe UX).
+ */
+export async function requestPasswordReset(email: string): Promise<void> {
+  assertFirebaseReady();
+  const normalized = email.trim();
+
+  try {
+    await sendPasswordResetEmail(getFirebaseAuth(), normalized);
+  } catch (error) {
+    const code =
+      typeof error === 'object' && error !== null && 'code' in error
+        ? String((error as { code?: unknown }).code ?? '')
+        : '';
+
+    if (PASSWORD_RESET_ENUMERATION_CODES.has(code) || code.includes('user-not-found')) {
+      return;
+    }
+
+    throw new Error(mapFirebaseError(error));
+  }
 }
 
 export async function getIdToken(user: FirebaseUser, forceRefresh = false): Promise<string> {

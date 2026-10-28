@@ -210,6 +210,7 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | ✅ ATP-3 | Estratégia de estado (Zustand + PoC de perfil / isolamento de sessão) |
 | ✅ ATP-34 | Tooling Notion: consultar tasks, detalhes e gerar/criar branch |
 | ✅ ATP-6 | Escopo do MVP e critérios de aceite documentados |
+| ✅ ATP-36 | Login/cadastro UX + recuperação de senha Firebase |
 | Planejado | Features Mobile: perfil, veículos, manutenções (jornadas do MVP) |
 | Planejado | Navegação definitiva, integração API real na demo |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
