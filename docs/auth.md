@@ -76,7 +76,7 @@ Veja `.env.example`. Todas as chaves do cliente usam prefixo `EXPO_PUBLIC_`.
 | `src/features/auth/services/bootstrapProfile.ts` | Bootstrap `/v1/auth/bootstrap` (fallback `/v1/users/me` + mock) |
 | `src/features/auth/store/sessionStore.ts` | Zustand: perfil + limpeza de sessão (ATP-3) |
 | `src/features/auth/` | AuthProvider, formulários, Google AuthSession |
-| `src/app/(auth)/` | Login e registro |
+| `src/app/(auth)/` | Login, registro e recuperação de senha |
 | `src/features/auth/types/user.ts` | Modelo `User` (sem senha; `firebaseUid` só leitura) |
 
 ## Google Sign-In no Expo
@@ -87,9 +87,27 @@ Implementação atual: `expo-auth-session` (`useIdTokenAuthRequest`) → `Google
 - **iOS/Android:** preferível **development build** (scheme `autotrackmobile`). Expo Go limita redirects OAuth.
 - Evolução nativa futura: `@react-native-google-signin/google-signin` (requer native code / EAS).
 
-## Recuperação de senha
+## Recuperação de senha (ATP-36)
 
-Fora do escopo da API. Use os fluxos do Firebase Auth no app (a adicionar quando necessário).
+Fora do escopo da API — só Firebase Auth no cliente:
+
+1. Tela `/(auth)/forgot-password` → `sendPasswordResetEmail`.
+2. UX enumeration-safe: sucesso genérico mesmo se o e-mail não existir (`auth/user-not-found` / e-mail inválido tratado no serviço).
+3. O link do e-mail abre o fluxo hospedado do Firebase (redefinição fora do app). Continuar URL customizada / deep link fica para tarefa futura.
+
+## Sessão Firebase × perfil API
+
+- `AuthGate` roteia só pelo ciclo Firebase (`authenticated` / `unauthenticated`).
+- Falha em `bootstrapUserProfile` **não** faz logout e **não** recria usuário no Firebase.
+- Home de sessão oferece “Tentar sincronizar perfil” (`refreshProfile`) para nova tentativa.
+
+## Provedores sociais validados
+
+| Provedor | Status no Mobile | Observação |
+| --- | --- | --- |
+| E-mail/senha | Validado | Cadastro, login, recuperação |
+| Google (`expo-auth-session` → ID token → Firebase) | Validado no fluxo Web; iOS/Android preferem development build | Expo Go limita OAuth redirect |
+| Apple / outros | Não implementados | Fora do escopo atual |
 
 ## Segurança / LGPD
 

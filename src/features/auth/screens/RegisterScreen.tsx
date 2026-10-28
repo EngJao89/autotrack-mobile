@@ -29,6 +29,8 @@ export function RegisterScreen() {
   });
 
   const onSubmit = handleSubmit(async (values) => {
+    if (submitting) return;
+
     setLocalError(null);
     clearError();
 
@@ -101,6 +103,7 @@ export function RegisterScreen() {
                   onChangeText={onChange}
                   onBlur={onBlur}
                   errorText={errors.password?.message}
+                  helperText="Mínimo 8 caracteres (Firebase aceita 6+; o app exige 8)."
                   required
                   disabled={submitting}
                 />
@@ -127,7 +130,7 @@ export function RegisterScreen() {
             />
 
             {localError || error ? (
-              <Text variant="bodySmall" color="error">
+              <Text variant="bodySmall" color="error" accessibilityLiveRegion="polite">
                 {localError || error}
               </Text>
             ) : null}

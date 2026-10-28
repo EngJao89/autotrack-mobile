@@ -27,4 +27,8 @@ describe('mapFirebaseError', () => {
       /Sign-in method|E-mail\/senha/i
     );
   });
+
+  it('maps expired action code for password recovery', () => {
+    assert.match(mapFirebaseError({ code: 'auth/expired-action-code' }), /recuperação|expirado/i);
+  });
 });

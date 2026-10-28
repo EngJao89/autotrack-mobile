@@ -34,6 +34,11 @@ export function mapFirebaseError(error: unknown): string {
       return 'Autenticação Firebase não configurada neste projeto. Em Authentication → Sign-in method, ative E-mail/senha (e Google, se for usar) e salve. Depois reinicie o Expo.';
     case 'auth/user-disabled':
       return 'Esta conta foi desabilitada.';
+    case 'auth/missing-email':
+      return 'Informe um e-mail para continuar.';
+    case 'auth/invalid-action-code':
+    case 'auth/expired-action-code':
+      return 'Link de recuperação inválido ou expirado. Solicite um novo e-mail.';
     default:
       return fallback;
   }

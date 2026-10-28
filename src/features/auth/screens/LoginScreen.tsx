@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Link } from 'expo-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -20,6 +20,7 @@ export function LoginScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
   const firebaseReady = isFirebaseConfigured();
+  const busy = submitting || google.pending;
 
   const {
     control,
@@ -31,6 +32,8 @@ export function LoginScreen() {
   });
 
   const onSubmit = handleSubmit(async (values) => {
+    if (submitting) return;
+
     setLocalError(null);
     clearError();
 
@@ -84,7 +87,7 @@ export function LoginScreen() {
                   onBlur={onBlur}
                   errorText={errors.email?.message}
                   required
-                  disabled={submitting}
+                  disabled={busy}
                 />
               )}
             />
@@ -103,13 +106,26 @@ export function LoginScreen() {
                   onBlur={onBlur}
                   errorText={errors.password?.message}
                   required
-                  disabled={submitting}
+                  disabled={busy}
                 />
               )}
             />
 
+            <Pressable
+              accessibilityRole="link"
+              accessibilityLabel="Esqueci minha senha"
+              disabled={busy}
+              style={{ alignSelf: 'flex-start' }}
+            >
+              <Link href="/(auth)/forgot-password">
+                <Text variant="bodySmall" color="brand" weight="semibold">
+                  Esqueci minha senha
+                </Text>
+              </Link>
+            </Pressable>
+
             {localError || error || google.error ? (
-              <Text variant="bodySmall" color="error">
+              <Text variant="bodySmall" color="error" accessibilityLiveRegion="polite">
                 {localError || error || google.error}
               </Text>
             ) : null}
@@ -118,7 +134,7 @@ export function LoginScreen() {
               label="Entrar"
               onPress={onSubmit}
               loading={submitting}
-              disabled={!firebaseReady || submitting}
+              disabled={!firebaseReady || busy}
             />
 
             <Button
@@ -126,7 +142,7 @@ export function LoginScreen() {
               variant="secondary"
               onPress={google.promptGoogleSignIn}
               loading={google.pending}
-              disabled={!firebaseReady || !google.ready || submitting}
+              disabled={!firebaseReady || !google.ready || busy}
             />
 
             <Text variant="caption" color="secondary">

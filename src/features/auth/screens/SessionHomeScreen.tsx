@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { View } from 'react-native';
 
 import { Badge, Button, Card, Screen, Text } from '@/components/ui';
@@ -8,7 +9,8 @@ import { useSessionStore } from '../store/sessionStore';
 
 /**
  * Temporary home while domain features (profile/vehicles) are not implemented.
- * PoC (ATP-3): shows Firebase session + Zustand profile bootstrap states.
+ * PoC (ATP-3 / ATP-36): Firebase session stays active even if profile bootstrap fails;
+ * retry never re-creates the Firebase user.
  */
 export function SessionHomeScreen() {
   const theme = useAppTheme();
@@ -25,6 +27,7 @@ export function SessionHomeScreen() {
   } = useAuth();
 
   const setSelectedVehicleId = useSessionStore((s) => s.setSelectedVehicleId);
+  const [retryingProfile, setRetryingProfile] = useState(false);
 
   const statusLabel =
     profileStatus === 'loading'
@@ -35,6 +38,16 @@ export function SessionHomeScreen() {
           ? 'Perfil pronto'
           : 'Perfil ocioso';
 
+  const onRetryProfile = async () => {
+    if (retryingProfile) return;
+    setRetryingProfile(true);
+    try {
+      await refreshProfile();
+    } finally {
+      setRetryingProfile(false);
+    }
+  };
+
   return (
     <Screen scroll>
       <View style={{ gap: theme.spacing[24] }}>
@@ -44,6 +57,27 @@ export function SessionHomeScreen() {
             Sessão Firebase no AuthProvider; perfil e seleção local no Zustand (limpos no logout).
           </Text>
         </View>
+
+        <Card elevated>
+          <View style={{ gap: theme.spacing[12] }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: theme.spacing[8],
+              }}
+            >
+              <Text variant="subtitle">Sessão</Text>
+              <Badge label="Firebase ativo" tone="success" />
+            </View>
+
+            <Text variant="caption" color="secondary">
+              Falha no bootstrap da API não encerra o login. Use “Tentar sincronizar perfil” — isso
+              não cadastra o usuário de novo no Firebase.
+            </Text>
+          </View>
+        </Card>
 
         <Card elevated>
           <View style={{ gap: theme.spacing[12] }}>
@@ -78,8 +112,14 @@ export function SessionHomeScreen() {
             </View>
 
             {profileStatus === 'error' ? (
-              <Text variant="body" color="secondary">
+              <Text variant="body" color="secondary" accessibilityLiveRegion="polite">
                 {profileError ?? 'Falha ao sincronizar perfil. A sessão Firebase permanece ativa.'}
+              </Text>
+            ) : null}
+
+            {profileStatus === 'loading' ? (
+              <Text variant="body" color="secondary">
+                Sincronizando perfil com a API…
               </Text>
             ) : null}
 
@@ -111,9 +151,11 @@ export function SessionHomeScreen() {
             onPress={() => setSelectedVehicleId('vehicle-poc-1')}
           />
           <Button
-            label="Atualizar perfil"
+            label="Tentar sincronizar perfil"
             variant="secondary"
-            onPress={() => void refreshProfile()}
+            onPress={() => void onRetryProfile()}
+            loading={retryingProfile || profileStatus === 'loading'}
+            disabled={retryingProfile || profileStatus === 'loading'}
           />
           <Button
             label="Copiar ID Token (dev)"
