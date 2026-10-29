@@ -67,10 +67,14 @@ export type MaintenanceType =
   | 'Outro'
   | string;
 
+/** Kanban status (ATP-39). Labels: A fazer / Em andamento / Concluído. */
+export type MaintenanceStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
+
 export type Maintenance = {
   id: string;
   vehicleId: string;
   type: MaintenanceType;
+  status: MaintenanceStatus;
   description: string | null;
   serviceDate: string;
   odometerKm: number | null;
@@ -84,6 +88,7 @@ export type Maintenance = {
 export type CreateMaintenanceInput = {
   type: MaintenanceType;
   serviceDate: string;
+  status?: MaintenanceStatus;
   description?: string;
   odometerKm?: number;
   costCents?: number;
@@ -92,6 +97,14 @@ export type CreateMaintenanceInput = {
 };
 
 export type UpdateMaintenanceInput = Partial<CreateMaintenanceInput>;
+
+export type ListMaintenancesQuery = {
+  vehicleId?: string;
+  status?: MaintenanceStatus;
+  type?: string;
+  startDate?: string;
+  endDate?: string;
+};
 
 export type UpdateUserInput = {
   name?: string | null;

@@ -19,6 +19,7 @@ export {
   createVehicleMaintenance,
   deleteMaintenance,
   getMaintenance,
+  listMaintenances,
   listVehicleMaintenances,
   updateMaintenance,
 } from './maintenances';
@@ -28,7 +29,9 @@ export type {
   CreateMaintenanceInput,
   CreateVehicleInput,
   HealthResponse,
+  ListMaintenancesQuery,
   Maintenance,
+  MaintenanceStatus,
   MaintenanceType,
   UpdateMaintenanceInput,
   UpdateUserInput,
