@@ -2,12 +2,13 @@ import type { User as FirebaseUser } from 'firebase/auth';
 
 import { env } from '@/config/env';
 import { ApiError, apiRequest } from '@/services/api/client';
+import type { ApiUser, BootstrapResponse } from '@/services/api/types';
 
 import type { User } from '../types/user';
 
 /**
  * Creates or returns the authenticated local profile.
- * Contract aligned with autotrack-api (ATP-30): Bearer Firebase ID token.
+ * Contract aligned with autotrack-api (ATP-30 / OpenAPI): Bearer Firebase ID token.
  * Prefer POST /v1/auth/bootstrap; fallback GET /v1/users/me.
  *
  * Mock adapter is explicit when EXPO_PUBLIC_API_MOCK=true — not a real API integration.
@@ -17,14 +18,15 @@ export async function bootstrapUserProfile(
   idToken: string
 ): Promise<User> {
   try {
-    return await apiRequest<User>('/v1/auth/bootstrap', {
+    const response = await apiRequest<BootstrapResponse>('/v1/auth/bootstrap', {
       method: 'POST',
       idToken,
-      body: {},
     });
+    return mapApiUserToProfile(response.user, firebaseUser);
   } catch (error) {
     if (error instanceof ApiError && (error.status === 404 || error.status === 405)) {
-      return apiRequest<User>('/v1/users/me', { method: 'GET', idToken });
+      const me = await apiRequest<ApiUser>('/v1/users/me', { method: 'GET', idToken });
+      return mapApiUserToProfile(me, firebaseUser);
     }
 
     if (env.apiMock && shouldUseMock(error)) {
@@ -35,11 +37,33 @@ export async function bootstrapUserProfile(
   }
 }
 
+function mapApiUserToProfile(apiUser: ApiUser, firebaseUser: FirebaseUser): User {
+  return {
+    id: apiUser.id,
+    firebaseUid: apiUser.firebaseUid ?? firebaseUser.uid,
+    email: apiUser.email,
+    name: apiUser.name,
+    cnh: apiUser.cnh,
+    document: apiUser.document,
+    documentType: apiUser.documentType,
+    phone: apiUser.phone,
+    createdAt:
+      typeof apiUser.createdAt === 'string'
+        ? apiUser.createdAt
+        : new Date(apiUser.createdAt).toISOString(),
+    updatedAt:
+      typeof apiUser.updatedAt === 'string'
+        ? apiUser.updatedAt
+        : new Date(apiUser.updatedAt).toISOString(),
+    vehicles: [],
+  };
+}
+
 function shouldUseMock(error: unknown): boolean {
   if (!(error instanceof ApiError)) {
     return true;
   }
-  // Network / not configured / API still being built
+  // Network / not configured / API still being built — never silent success without mock flag.
   return error.status === 0 || error.status >= 500 || error.status === 404;
 }
 

@@ -59,7 +59,8 @@ Veja `.env.example`. Todas as chaves do cliente usam prefixo `EXPO_PUBLIC_`.
 
 | Variável | Uso |
 | --- | --- |
-| `EXPO_PUBLIC_API_URL` | Base da autotrack-api |
+| `EXPO_PUBLIC_API_URL` | Base da autotrack-api (sem `/v1`) |
+| `EXPO_PUBLIC_API_TIMEOUT_MS` | Timeout Axios (ms); default 30000 |
 | `EXPO_PUBLIC_API_MOCK` | Fallback de perfil local se a API falhar |
 | `EXPO_PUBLIC_FIREBASE_*` | Config do app Web Firebase |
 | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` | OAuth web (fallback em todas as plataformas) |
@@ -71,7 +72,8 @@ Veja `.env.example`. Todas as chaves do cliente usam prefixo `EXPO_PUBLIC_`.
 | Caminho | Responsabilidade |
 | --- | --- |
 | `src/services/firebase.ts` | Init Firebase + persistência AsyncStorage |
-| `src/services/api/client.ts` | HTTP + Bearer |
+| `src/services/api/client.ts` | Axios compartilhado + Bearer + timeout + 401 refresh |
+| `src/services/api/*` | Health, users, vehicles, maintenances (ATP-40) |
 | `src/features/auth/services/session.ts` | E-mail/senha e credential Google |
 | `src/features/auth/services/bootstrapProfile.ts` | Bootstrap `/v1/auth/bootstrap` (fallback `/v1/users/me` + mock) |
 | `src/features/auth/store/sessionStore.ts` | Zustand: perfil + limpeza de sessão (ATP-3) |

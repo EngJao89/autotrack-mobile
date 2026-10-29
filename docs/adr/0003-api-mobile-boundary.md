@@ -20,7 +20,7 @@
 
 1. **BFF / GraphQL no mobile** — flexível, mas adiciona camada não prevista no MVP.
 2. **Cliente OpenAPI gerado desde o dia 1** — desejável depois; ainda não há pipeline aceito no mobile.
-3. **Contratos manuais + fetch tipado (atual)** — alinhado ao código existente (`apiRequest`).
+3. **Contratos manuais + HTTP tipado (`apiRequest`)** — alinhado ao código existente (Axios desde ATP-40).
 
 ## Decisão
 
@@ -38,7 +38,7 @@
 - Bootstrap de perfil autenticado:
   - Preferido: `POST /v1/auth/bootstrap`
   - Fallback: `GET /v1/users/me`
-- Transporte: `src/services/api/client.ts` (fetch + JSON)
+- Transporte: `src/services/api/client.ts` (Axios + JSON; ver `docs/api-client.md`)
 - Operações de domínio de auth: `src/features/auth/services/bootstrapProfile.ts`
 
 ### Adapters de desenvolvimento

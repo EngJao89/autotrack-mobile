@@ -9,6 +9,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Cliente HTTP Axios compartilhado (`src/services/api`), timeout configurável, cancelamento no logout, serviços tipados de health/users/vehicles/maintenances e integração com a API no Render (`ATP-40`)
 - Recuperação de senha via Firebase (`/(auth)/forgot-password`), UX enumeration-safe e retry de bootstrap de perfil sem recriar usuário (`ATP-36`)
 - Escopo do MVP e critérios de aceite, com auditoria Mobile/API e rastreabilidade de backlog (`ATP-6`)
 - Tooling Notion no Mobile: CLI para listar/mostrar tasks, sugerir ou criar branch local, docs e testes (`ATP-34`)
@@ -18,6 +19,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Changed
 
+- Transporte HTTP migrado de `fetch` para Axios; bootstrap alinha resposta `{ created, user }` do contrato OpenAPI (`ATP-40`)
 - Login/cadastro: bloqueio de envio duplicado, link “Esqueci minha senha” e feedback de sessão/perfil na home (`ATP-36`)
 - Consolidação feature-first: Auth como módulo de referência, rotas finas, `docs/architecture.md` e `npm run check:deps` (`ATP-7`)
 
