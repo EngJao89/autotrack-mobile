@@ -219,7 +219,8 @@ Política: timeout configurável; 401 com no máximo uma renovação de token; l
 | ✅ ATP-6 | Escopo do MVP e critérios de aceite documentados |
 | ✅ ATP-36 | Login/cadastro UX + recuperação de senha Firebase |
 | ✅ ATP-40 | Cliente Axios compartilhado + API Render (`docs/api-client.md`) |
-| Planejado | Features Mobile: perfil, veículos, manutenções (jornadas do MVP) |
+| ✅ ATP-39 | Dashboard Home + kanban de reparos (`docs/maintenance-dashboard.md`) |
+| Planejado | Features Mobile: perfil, veículos, manutenções (CRUD completo) |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
 
 ## Licença

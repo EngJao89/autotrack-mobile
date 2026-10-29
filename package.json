@@ -14,7 +14,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test src/config/firebaseConfig.test.ts src/features/auth/mapFirebaseError.test.ts src/features/auth/schemas.test.ts src/features/auth/store/sessionStore.test.ts src/services/api/errors.test.ts scripts/notion/branchName.test.mjs scripts/notion/mapProperties.test.mjs scripts/notion/gitBranch.test.mjs",
+    "test": "node --import tsx --test src/config/firebaseConfig.test.ts src/features/auth/mapFirebaseError.test.ts src/features/auth/schemas.test.ts src/features/auth/store/sessionStore.test.ts src/services/api/errors.test.ts src/features/home/lib/kanban.test.ts scripts/notion/branchName.test.mjs scripts/notion/mapProperties.test.mjs scripts/notion/gitBranch.test.mjs",
     "notion:list": "node scripts/notion/cli.mjs list",
     "notion:show": "node scripts/notion/cli.mjs show",
     "notion:suggest-branch": "node scripts/notion/cli.mjs suggest-branch",

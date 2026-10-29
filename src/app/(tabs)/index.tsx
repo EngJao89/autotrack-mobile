@@ -1,3 +1,3 @@
-import { SessionHomeScreen } from '@/features/auth';
+import { DashboardScreen } from '@/features/home';
 
-export default SessionHomeScreen;
+export default DashboardScreen;
