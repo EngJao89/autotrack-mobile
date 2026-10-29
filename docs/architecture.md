@@ -13,7 +13,7 @@ Escopo de produto do MVP (jornadas e aceite): [mvp-scope.md](./mvp-scope.md) (AT
 | Design System | `src/components/ui/` | Primitivos tipados (Button, Text, Screen, …) |
 | Tema | `src/theme/` | Tokens + `AppThemeProvider` |
 | Config | `src/config/` | Leitura/validação de `EXPO_PUBLIC_*` |
-| Infra | `src/services/` | Firebase app/auth init + transporte HTTP (`api/client`) |
+| Infra | `src/services/` | Firebase app/auth init + transporte HTTP Axios (`api/*`, ATP-40) |
 | Template legado | `src/constants/`, `src/hooks/`, componentes themed | Starter Expo; não é domínio |
 | Tipos CSS | `src/types/css.d.ts` | Declarações de módulo CSS |
 
@@ -99,7 +99,7 @@ export default LoginScreen;
 
 ### Adapters e mock
 
-- Transporte HTTP: `src/services/api/client.ts`
+- Transporte HTTP: Axios em `src/services/api/` ([docs/api-client.md](./api-client.md))
 - Firebase init: `src/services/firebase.ts`
 - Bootstrap com mock: `features/auth/services/bootstrapProfile.ts` quando `EXPO_PUBLIC_API_MOCK=true` — **não** é integração de produção; documentado em `docs/auth.md`
 - Fronteira canônica com a API (responsabilidades, ownership, lacunas): [autotrack-api `docs/api-mobile-boundary.md`](https://github.com/EngJao89/autotrack-api/blob/master/docs/api-mobile-boundary.md) (ATP-13)

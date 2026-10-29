@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 
 import { Badge, Button, Card, Screen, Text } from '@/components/ui';
+import { ApiError, isAbortError, listVehicles, type Vehicle } from '@/services/api';
 import { useAppTheme } from '@/theme';
 
 import { useAuth } from '../AuthProvider';
@@ -9,8 +10,8 @@ import { useSessionStore } from '../store/sessionStore';
 
 /**
  * Temporary home while domain features (profile/vehicles) are not implemented.
- * PoC (ATP-3 / ATP-36): Firebase session stays active even if profile bootstrap fails;
- * retry never re-creates the Firebase user.
+ * PoC (ATP-3 / ATP-36 / ATP-40): Firebase session stays active even if profile bootstrap fails;
+ * retry never re-creates the Firebase user. Vehicles list is a smoke against the shared Axios client.
  */
 export function SessionHomeScreen() {
   const theme = useAppTheme();
@@ -28,6 +29,11 @@ export function SessionHomeScreen() {
 
   const setSelectedVehicleId = useSessionStore((s) => s.setSelectedVehicleId);
   const [retryingProfile, setRetryingProfile] = useState(false);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [vehiclesStatus, setVehiclesStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>(
+    'idle'
+  );
+  const [vehiclesError, setVehiclesError] = useState<string | null>(null);
 
   const statusLabel =
     profileStatus === 'loading'
@@ -38,6 +44,8 @@ export function SessionHomeScreen() {
           ? 'Perfil pronto'
           : 'Perfil ocioso';
 
+  const canLoadVehicles = profileStatus === 'ready' && !isMockProfile && Boolean(profile);
+
   const onRetryProfile = async () => {
     if (retryingProfile) return;
     setRetryingProfile(true);
@@ -45,6 +53,36 @@ export function SessionHomeScreen() {
       await refreshProfile();
     } finally {
       setRetryingProfile(false);
+    }
+  };
+
+  const onLoadVehicles = async () => {
+    if (!canLoadVehicles || vehiclesStatus === 'loading') return;
+
+    setVehiclesStatus('loading');
+    setVehiclesError(null);
+
+    try {
+      const items = await listVehicles();
+      setVehicles(items);
+      setVehiclesStatus('ready');
+      const currentSelection = useSessionStore.getState().selectedVehicleId;
+      if (!currentSelection && items[0]) {
+        setSelectedVehicleId(items[0].id);
+      }
+    } catch (error: unknown) {
+      if (isAbortError(error)) {
+        setVehiclesStatus('idle');
+        return;
+      }
+      const message =
+        error instanceof ApiError
+          ? error.message
+          : error instanceof Error
+            ? error.message
+            : 'Falha ao listar veículos';
+      setVehiclesError(message);
+      setVehiclesStatus('error');
     }
   };
 
@@ -134,22 +172,86 @@ export function SessionHomeScreen() {
               {profile?.firebaseUid || firebaseUser?.uid || '—'}
             </Text>
 
-            <Text variant="label">Veículo selecionado (PoC)</Text>
+            <Text variant="label">Veículo selecionado</Text>
             <Text variant="body">{selectedVehicleId ?? 'nenhum'}</Text>
 
             <Text variant="caption" color="secondary">
-              Identidade estável: firebaseUid. Tokens não entram no store. Logout limpa perfil e
-              veículo selecionado.
+              Identidade estável: firebaseUid. Tokens não entram no store. Logout cancela requests e
+              limpa perfil/veículo.
             </Text>
           </View>
         </Card>
 
+        <Card elevated>
+          <View style={{ gap: theme.spacing[12] }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: theme.spacing[8],
+              }}
+            >
+              <Text variant="subtitle">Veículos (API)</Text>
+              <Badge
+                label={
+                  vehiclesStatus === 'loading'
+                    ? 'Carregando…'
+                    : vehiclesStatus === 'error'
+                      ? 'Erro'
+                      : vehiclesStatus === 'ready'
+                        ? `${vehicles.length} item(ns)`
+                        : 'Aguardando'
+                }
+                tone={
+                  vehiclesStatus === 'error'
+                    ? 'error'
+                    : vehiclesStatus === 'ready'
+                      ? 'success'
+                      : 'neutral'
+                }
+              />
+            </View>
+
+            {isMockProfile ? (
+              <Text variant="body" color="secondary">
+                Mock ativo — listagem real de veículos desligada. Desligue EXPO_PUBLIC_API_MOCK para
+                usar a API.
+              </Text>
+            ) : null}
+
+            {vehiclesError ? (
+              <Text variant="body" color="secondary" accessibilityLiveRegion="polite">
+                {vehiclesError}
+              </Text>
+            ) : null}
+
+            {vehiclesStatus === 'ready' && vehicles.length === 0 ? (
+              <Text variant="body" color="secondary">
+                Nenhum veículo cadastrado ainda. O CRUD completo fica na feature de veículos.
+              </Text>
+            ) : null}
+
+            {vehicles.map((vehicle) => (
+              <Button
+                key={vehicle.id}
+                label={`${vehicle.brand} ${vehicle.model} (${vehicle.year})`}
+                variant={selectedVehicleId === vehicle.id ? 'primary' : 'secondary'}
+                onPress={() => setSelectedVehicleId(vehicle.id)}
+              />
+            ))}
+
+            <Button
+              label="Listar veículos (API)"
+              variant="secondary"
+              onPress={() => void onLoadVehicles()}
+              loading={vehiclesStatus === 'loading'}
+              disabled={!canLoadVehicles || vehiclesStatus === 'loading'}
+            />
+          </View>
+        </Card>
+
         <View style={{ gap: theme.spacing[12] }}>
-          <Button
-            label="Selecionar veículo demo"
-            variant="secondary"
-            onPress={() => setSelectedVehicleId('vehicle-poc-1')}
-          />
           <Button
             label="Tentar sincronizar perfil"
             variant="secondary"
@@ -158,7 +260,7 @@ export function SessionHomeScreen() {
             disabled={retryingProfile || profileStatus === 'loading'}
           />
           <Button
-            label="Copiar ID Token (dev)"
+            label="ID Token length (dev)"
             variant="secondary"
             onPress={async () => {
               const token = await getAccessToken();

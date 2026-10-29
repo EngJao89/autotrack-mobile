@@ -10,6 +10,7 @@ import {
 import { onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 
 import { getFirebaseSetupMessage, isFirebaseConfigured } from '@/config/env';
+import { cancelPendingApiRequests } from '@/services/api/client';
 import { getFirebaseAuth } from '@/services/firebase';
 
 import { mapFirebaseError } from './mapFirebaseError';
@@ -97,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setError(null);
 
       if (!user) {
+        cancelPendingApiRequests();
         useSessionStore.getState().clearSessionClientState();
         setFirebaseUser(null);
         setStatus('unauthenticated');
@@ -105,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const previousIdentity = useSessionStore.getState().identityKey;
       if (previousIdentity && previousIdentity !== user.uid) {
+        cancelPendingApiRequests();
         useSessionStore.getState().clearSessionClientState();
       }
 
@@ -119,6 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const completeAuth = useCallback(async (credentialUser: FirebaseUser) => {
     const previousIdentity = useSessionStore.getState().identityKey;
     if (previousIdentity && previousIdentity !== credentialUser.uid) {
+      cancelPendingApiRequests();
       useSessionStore.getState().clearSessionClientState();
     }
 
@@ -183,6 +187,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = useCallback(async () => {
     setError(null);
+    cancelPendingApiRequests();
     useSessionStore.getState().clearSessionClientState();
     await authSignOut();
     setFirebaseUser(null);

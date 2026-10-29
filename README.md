@@ -16,6 +16,7 @@ Este repositório é a base do app cliente (Expo / React Native / TypeScript). E
 | [TypeScript](https://www.typescriptlang.org) | Tipagem estática |
 | [Expo Router](https://docs.expo.dev/router/introduction/) | Rotas baseadas em arquivos (`src/app/`) |
 | [Zustand](https://zustand.docs.pmnd.rs/) | Estado cliente compartilhado (perfil/sessão local) |
+| [Axios](https://axios-http.com/) | Cliente HTTP compartilhado para a `autotrack-api` |
 | npm | Gerenciador de pacotes (fixado via `package-lock.json`) |
 
 ## Pré-requisitos
@@ -167,7 +168,9 @@ Consultar tasks / gerar branch: [docs/notion-task-workflow.md](./docs/notion-tas
 
 | Variável | Descrição |
 | --- | --- |
-| `EXPO_PUBLIC_API_URL` | URL base da `autotrack-api` |
+| `EXPO_PUBLIC_API_URL` | URL base da `autotrack-api` **sem** `/v1` (Render: `https://autotrack-api-5r68.onrender.com`) |
+| `EXPO_PUBLIC_API_TIMEOUT_MS` | Timeout Axios em ms (default `30000`) |
+| `EXPO_PUBLIC_API_MOCK` | Fallback explícito de perfil se a API falhar (`false` contra API real) |
 | `EXPO_PUBLIC_APP_ENV` | Ambiente (`development`, `staging`, `production`) |
 
 Somente variáveis com prefixo `EXPO_PUBLIC_` ficam disponíveis no cliente Expo. Segredos administrativos (service accounts, chaves privadas) **não** pertencem a este repositório.
@@ -186,8 +189,12 @@ O `.gitignore` já cobre `node_modules`, caches Expo/Metro, pastas nativas gerad
 O mobile consome a **autotrack-api**:
 
 - Repositório: https://github.com/EngJao89/autotrack-api
+- Ambiente publicado (Render): https://autotrack-api-5r68.onrender.com
+- Health: `GET /v1/health` · OpenAPI: `/api/docs` · JSON: `/api/docs-json`
+- Cliente Axios compartilhado: [docs/api-client.md](./docs/api-client.md) (`ATP-40`)
 
-Integração de produção, autenticação e contratos de endpoints serão tratados em tarefas posteriores.
+Auth de usuários permanece no **Firebase**; perfil/veículos/manutenções usam Bearer ID Token na API.  
+Política: timeout configurável; 401 com no máximo uma renovação de token; logout cancela requests pendentes; mock só com `EXPO_PUBLIC_API_MOCK=true` (explícito na UI).
 
 ## Contribuição
 
@@ -211,8 +218,8 @@ Integração de produção, autenticação e contratos de endpoints serão trata
 | ✅ ATP-34 | Tooling Notion: consultar tasks, detalhes e gerar/criar branch |
 | ✅ ATP-6 | Escopo do MVP e critérios de aceite documentados |
 | ✅ ATP-36 | Login/cadastro UX + recuperação de senha Firebase |
+| ✅ ATP-40 | Cliente Axios compartilhado + API Render (`docs/api-client.md`) |
 | Planejado | Features Mobile: perfil, veículos, manutenções (jornadas do MVP) |
-| Planejado | Navegação definitiva, integração API real na demo |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
 
 ## Licença
