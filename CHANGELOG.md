@@ -7,6 +7,9 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Fixed
+- Documented post-login `AUTH_TOKEN_INVALID` troubleshooting when API `FIREBASE_PROJECT_ID` mismatches the mobile Firebase project ([ATP-41])
+
 ### Added
 
 - Dashboard de manutenção com kanban (A fazer / Em andamento / Concluído), filtro por veículo, cadastro mínimo de veículo/reparo e Home de produto no lugar da home técnica (`ATP-39`)

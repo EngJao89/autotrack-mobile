@@ -118,6 +118,10 @@ Fora do escopo da API — só Firebase Auth no cliente:
 - Não logar ID tokens em produção.
 - Minimizar dados pessoais no perfil; finalidade documentada no produto.
 
+## Troubleshooting — `Authentication token is invalid or expired` após login
+
+Se o Firebase login funciona mas a Home/dashboard mostra `AUTH_TOKEN_INVALID` em toda sessão, a causa mais comum **não** é o Axios do mobile: é o Admin SDK da API com `FIREBASE_PROJECT_ID` diferente do projeto do app (`EXPO_PUBLIC_FIREBASE_PROJECT_ID`) ou com valor numérico (client id) em vez do project id string. Corrija as env da API (local e Render) e alinhe com o service account (`…@<project-id>.iam.gserviceaccount.com`). Ver `autotrack-api` docs/firebase-providers.md (ATP-41).
+
 ## Como testar enquanto a API sobe
 
 1. `cp .env.example .env` e preencha Firebase.
