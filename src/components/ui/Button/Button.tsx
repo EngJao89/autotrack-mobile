@@ -1,7 +1,9 @@
+import { Ionicons } from '@expo/vector-icons';
 import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
+  View,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
@@ -18,6 +20,7 @@ export type ButtonProps = {
   variant?: ButtonVariant;
   disabled?: boolean;
   loading?: boolean;
+  icon?: keyof typeof Ionicons.glyphMap;
   accessibilityLabel?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
@@ -29,6 +32,7 @@ export function Button({
   variant = 'primary',
   disabled = false,
   loading = false,
+  icon,
   accessibilityLabel,
   style,
   testID,
@@ -85,6 +89,7 @@ export function Button({
           borderColor: palette.border,
           borderWidth: variant === 'secondary' ? StyleSheet.hairlineWidth * 2 : 0,
           opacity: isDisabled ? theme.opacity.disabled : pressed ? theme.opacity.pressed : 1,
+          gap: theme.spacing[8],
         },
         style,
       ]}
@@ -92,9 +97,12 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={palette.text} />
       ) : (
-        <Text variant="label" weight="semibold" style={{ color: palette.text }}>
-          {label}
-        </Text>
+        <View style={[styles.content, { gap: theme.spacing[8] }]}>
+          {icon ? <Ionicons name={icon} size={theme.layout.iconSize} color={palette.text} /> : null}
+          <Text variant="label" weight="semibold" style={{ color: palette.text }}>
+            {label}
+          </Text>
+        </View>
       )}
     </Pressable>
   );
@@ -102,6 +110,11 @@ export function Button({
 
 const styles = StyleSheet.create({
   base: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  content: {
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',

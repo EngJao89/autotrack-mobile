@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Link } from 'expo-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { getFirebaseSetupMessage, isFirebaseConfigured } from '@/config/env';
-import { Button, Card, Screen, Text, TextInput } from '@/components/ui';
+import { Button, Card, Text, TextInput } from '@/components/ui';
 import { useAppTheme } from '@/theme';
 
 import { useAuth } from '../AuthProvider';
+import { AuthOrDivider } from '../components/AuthOrDivider';
+import { AuthScreenShell } from '../components/AuthScreenShell';
 import { useGoogleSignIn } from '../hooks/useGoogleSignIn';
 import { mapFirebaseError } from '../mapFirebaseError';
 import { emailPasswordSchema, type EmailPasswordForm } from '../schemas';
@@ -21,6 +23,7 @@ export function LoginScreen() {
   const [localError, setLocalError] = useState<string | null>(null);
   const firebaseReady = isFirebaseConfigured();
   const busy = submitting || google.pending;
+  const formError = localError || error || google.error;
 
   const {
     control,
@@ -53,45 +56,53 @@ export function LoginScreen() {
   });
 
   return (
-    <Screen scroll>
-      <View style={{ gap: theme.spacing[24], paddingTop: theme.spacing[24] }}>
-        <View style={{ gap: theme.spacing[8] }}>
-          <Text variant="title">AutoTrack</Text>
-          <Text variant="body" color="secondary">
-            Entre com Firebase (e-mail/senha ou Google). A API recebe apenas o ID Token.
-          </Text>
-        </View>
-
-        {!firebaseReady || status === 'unconfigured' ? (
-          <Card>
-            <Text variant="body" color="warning">
-              {getFirebaseSetupMessage()}
+    <AuthScreenShell
+      title="Bem-vindo de volta"
+      subtitle="Entre para acompanhar manutenções e o histórico dos seus veículos."
+      footer={
+        <Text variant="bodySmall" color="secondary">
+          Não tem conta?{' '}
+          <Link href="/(auth)/register">
+            <Text variant="bodySmall" color="brand" weight="semibold">
+              Criar conta
             </Text>
-          </Card>
-        ) : null}
-
+          </Link>
+        </Text>
+      }
+    >
+      {!firebaseReady || status === 'unconfigured' ? (
         <Card>
-          <View style={{ gap: theme.spacing[16] }}>
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="E-mail"
-                  placeholder="voce@email.com"
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  autoComplete="email"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  errorText={errors.email?.message}
-                  required
-                  disabled={busy}
-                />
-              )}
-            />
+          <Text variant="body" color="warning">
+            {getFirebaseSetupMessage()}
+          </Text>
+        </Card>
+      ) : null}
 
+      <Card elevated>
+        <View style={{ gap: theme.spacing[20] }}>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="E-mail"
+                placeholder="voce@email.com"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                autoComplete="email"
+                textContentType="emailAddress"
+                returnKeyType="next"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                errorText={errors.email?.message}
+                required
+                disabled={busy}
+              />
+            )}
+          />
+
+          <View style={{ gap: theme.spacing[8] }}>
             <Controller
               control={control}
               name="password"
@@ -101,6 +112,9 @@ export function LoginScreen() {
                   placeholder="••••••••"
                   secureTextEntry
                   autoComplete="password"
+                  textContentType="password"
+                  returnKeyType="go"
+                  onSubmitEditing={() => void onSubmit()}
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
@@ -111,55 +125,44 @@ export function LoginScreen() {
               )}
             />
 
-            <Pressable
-              accessibilityRole="link"
-              accessibilityLabel="Esqueci minha senha"
-              disabled={busy}
-              style={{ alignSelf: 'flex-start' }}
-            >
-              <Link href="/(auth)/forgot-password">
-                <Text variant="bodySmall" color="brand" weight="semibold">
-                  Esqueci minha senha
-                </Text>
-              </Link>
-            </Pressable>
-
-            {localError || error || google.error ? (
-              <Text variant="bodySmall" color="error" accessibilityLiveRegion="polite">
-                {localError || error || google.error}
+            <Link href="/(auth)/forgot-password" accessibilityRole="link">
+              <Text variant="bodySmall" color="brand" weight="semibold">
+                Esqueci minha senha
               </Text>
-            ) : null}
+            </Link>
+          </View>
 
-            <Button
-              label="Entrar"
-              onPress={onSubmit}
-              loading={submitting}
-              disabled={!firebaseReady || busy}
-            />
+          {formError ? (
+            <Text variant="bodySmall" color="error" accessibilityLiveRegion="polite">
+              {formError}
+            </Text>
+          ) : null}
 
-            <Button
-              label="Continuar com Google"
-              variant="secondary"
-              onPress={google.promptGoogleSignIn}
-              loading={google.pending}
-              disabled={!firebaseReady || !google.ready || busy}
-            />
+          <Button
+            label="Entrar"
+            onPress={() => void onSubmit()}
+            loading={submitting}
+            disabled={!firebaseReady || busy}
+          />
 
+          <AuthOrDivider />
+
+          <Button
+            label="Continuar com Google"
+            variant="secondary"
+            icon="logo-google"
+            onPress={google.promptGoogleSignIn}
+            loading={google.pending}
+            disabled={!firebaseReady || !google.ready || busy}
+          />
+
+          {__DEV__ ? (
             <Text variant="caption" color="secondary">
               {google.hint}
             </Text>
-          </View>
-        </Card>
-
-        <Text variant="bodySmall" color="secondary">
-          Não tem conta?{' '}
-          <Link href="/(auth)/register">
-            <Text variant="bodySmall" color="brand" weight="semibold">
-              Criar conta
-            </Text>
-          </Link>
-        </Text>
-      </View>
-    </Screen>
+          ) : null}
+        </View>
+      </Card>
+    </AuthScreenShell>
   );
 }
