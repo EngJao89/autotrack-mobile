@@ -95,6 +95,12 @@ export default function DesignSystemPreviewScreen() {
               <Button label="Secondary" variant="secondary" onPress={() => undefined} />
               <Button label="Ghost" variant="ghost" onPress={() => undefined} />
               <Button label="Destructive" variant="destructive" onPress={() => undefined} />
+              <Button
+                label="Continuar com Google"
+                variant="secondary"
+                icon="logo-google"
+                onPress={() => undefined}
+              />
               <Button label="Loading" loading onPress={() => undefined} />
               <Button label="Disabled" disabled onPress={() => undefined} />
             </View>
@@ -119,6 +125,13 @@ export default function DesignSystemPreviewScreen() {
                 placeholder="••••••••"
                 value={password}
                 onChangeText={setPassword}
+                secureTextEntry
+                helperText="Toque no olho para mostrar/ocultar."
+              />
+              <TextInput
+                label="Senha (com erro)"
+                placeholder="••••••••"
+                value="123"
                 secureTextEntry
                 errorText="A senha deve ter pelo menos 8 caracteres."
               />

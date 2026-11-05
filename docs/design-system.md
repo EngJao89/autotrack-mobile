@@ -73,8 +73,8 @@ Importação: `@/components/ui`.
 | --- | --- |
 | `Screen` | Safe area, fundo canvas, padding e scroll opcional |
 | `Text` | Variantes tipográficas e cores semânticas |
-| `Button` | `primary`, `secondary`, `ghost`, `destructive` + `disabled` / `loading` |
-| `TextInput` | Label, helper, erro, required, disabled |
+| `Button` | `primary`, `secondary`, `ghost`, `destructive` + `disabled` / `loading` / `icon` opcional |
+| `TextInput` | Label, helper, erro, required, disabled; toggle de senha quando `secureTextEntry` |
 | `Card` | Surface com borda ou elevação |
 | `IconButton` | Toque mínimo + `accessibilityLabel` obrigatório |
 | `Divider` | Separação com token de borda |

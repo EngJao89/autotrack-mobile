@@ -9,6 +9,7 @@ import {
 
 import { useAppTheme } from '@/theme';
 
+import { IconButton } from '../IconButton';
 import { Text } from '../Text';
 
 export type TextInputProps = Omit<RNTextInputProps, 'editable'> & {
@@ -17,6 +18,8 @@ export type TextInputProps = Omit<RNTextInputProps, 'editable'> & {
   errorText?: string;
   disabled?: boolean;
   required?: boolean;
+  /** When `secureTextEntry` is set, shows an eye toggle to reveal/hide the value. */
+  passwordToggle?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
   testID?: string;
 };
@@ -28,8 +31,10 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(function TextIn
     errorText,
     disabled = false,
     required = false,
+    passwordToggle = true,
     containerStyle,
     style,
+    secureTextEntry,
     onFocus,
     onBlur,
     accessibilityLabel,
@@ -40,8 +45,11 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(function TextIn
 ) {
   const theme = useAppTheme();
   const [focused, setFocused] = useState(false);
+  const [revealed, setRevealed] = useState(false);
   const generatedId = useId();
   const hasError = Boolean(errorText);
+  const showToggle = Boolean(secureTextEntry) && passwordToggle;
+  const isSecure = Boolean(secureTextEntry) && !revealed;
   const describedBy = hasError
     ? `${generatedId}-error`
     : helperText
@@ -68,40 +76,64 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(function TextIn
         </Text>
       ) : null}
 
-      <RNTextInput
-        ref={ref}
-        editable={!disabled}
-        placeholderTextColor={theme.colors.text.secondary}
-        accessibilityLabel={accessibilityLabel ?? label}
-        accessibilityState={{ disabled }}
-        aria-invalid={hasError}
-        aria-describedby={describedBy}
-        onFocus={(event) => {
-          setFocused(true);
-          onFocus?.(event);
-        }}
-        onBlur={(event) => {
-          setFocused(false);
-          onBlur?.(event);
-        }}
-        style={[
-          {
-            minHeight: theme.layout.touchTargetMin,
-            height: theme.layout.controlHeight,
-            borderWidth: 1.5,
-            borderColor,
-            borderRadius: theme.radii.md,
-            paddingHorizontal: theme.spacing[12],
-            color: theme.colors.text.primary,
-            backgroundColor: theme.colors.background.surface,
-            fontSize: theme.typography.fontSize.md,
-            fontFamily: theme.typography.fontFamily.sans,
-            opacity: disabled ? theme.opacity.disabled : 1,
-          },
-          style,
-        ]}
-        {...rest}
-      />
+      <View style={{ position: 'relative', justifyContent: 'center' }}>
+        <RNTextInput
+          ref={ref}
+          editable={!disabled}
+          secureTextEntry={isSecure}
+          placeholderTextColor={theme.colors.text.secondary}
+          accessibilityLabel={accessibilityLabel ?? label}
+          accessibilityState={{ disabled }}
+          aria-invalid={hasError}
+          aria-describedby={describedBy}
+          onFocus={(event) => {
+            setFocused(true);
+            onFocus?.(event);
+          }}
+          onBlur={(event) => {
+            setFocused(false);
+            onBlur?.(event);
+          }}
+          style={[
+            {
+              minHeight: theme.layout.touchTargetMin,
+              height: theme.layout.controlHeight,
+              borderWidth: 1.5,
+              borderColor,
+              borderRadius: theme.radii.md,
+              paddingHorizontal: theme.spacing[12],
+              paddingRight: showToggle ? theme.spacing[48] : theme.spacing[12],
+              color: theme.colors.text.primary,
+              backgroundColor: theme.colors.background.surface,
+              fontSize: theme.typography.fontSize.md,
+              fontFamily: theme.typography.fontFamily.sans,
+              opacity: disabled ? theme.opacity.disabled : 1,
+            },
+            style,
+          ]}
+          {...rest}
+        />
+
+        {showToggle ? (
+          <View
+            style={{
+              position: 'absolute',
+              right: theme.spacing[4],
+              top: 0,
+              bottom: 0,
+              justifyContent: 'center',
+            }}
+          >
+            <IconButton
+              icon={revealed ? 'eye-off-outline' : 'eye-outline'}
+              accessibilityLabel={revealed ? 'Ocultar senha' : 'Mostrar senha'}
+              disabled={disabled}
+              color={theme.colors.text.secondary}
+              onPress={() => setRevealed((current) => !current)}
+            />
+          </View>
+        ) : null}
+      </View>
 
       {hasError ? (
         <Text
