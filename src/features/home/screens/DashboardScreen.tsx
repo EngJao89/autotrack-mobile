@@ -5,6 +5,7 @@ import { Modal, Pressable, View } from 'react-native';
 import { Badge, Button, Card, Loading, Screen, Text } from '@/components/ui';
 import { useAuth, useSessionStore } from '@/features/auth';
 import { CreateEstimateForm, EstimateCard, EstimateDetail } from '@/features/estimates';
+import { CreateVehicleForm } from '@/features/vehicles';
 import {
   ApiError,
   createVehicle,
@@ -27,7 +28,6 @@ import {
 import { useAppTheme } from '@/theme';
 
 import { CreateRepairForm } from '../components/CreateRepairForm';
-import { CreateVehicleForm } from '../components/CreateVehicleForm';
 import { RepairCard } from '../components/RepairCard';
 import { SummaryRow } from '../components/SummaryRow';
 import { VehiclePicker } from '../components/VehiclePicker';
@@ -81,11 +81,7 @@ export function DashboardScreen() {
       setEstimates(nextEstimates);
       setLoadState('ready');
 
-      if (
-        vehicleFilter &&
-        nextVehicles.length > 0 &&
-        !nextVehicles.some((v) => v.id === vehicleFilter)
-      ) {
+      if (vehicleFilter && !nextVehicles.some((v) => v.id === vehicleFilter)) {
         setSelectedVehicleId(null);
       }
     } catch (error) {

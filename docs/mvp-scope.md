@@ -118,7 +118,7 @@ Referência: `autotrack-mobile` e `autotrack-api` em outubro/2026.
 | Auth Firebase + Bearer | Entregue | Entregue (telas + AuthProvider) | Base OK |
 | Bootstrap / perfil leitura | Entregue | Parcial (bootstrap + home sessão; mock possível) | Gap: demo sem mock |
 | Edição de perfil | Entregue | Pendente (`features/profile`) | Gap MVP |
-| Vehicles CRUD + ownership | Entregue | Pendente (`features/vehicles`) | Gap MVP |
+| Vehicles CRUD + ownership | Entregue | Entregue (`features/vehicles`, ATP-37) | Base OK |
 | Maintenance CRUD + histórico | Entregue | Pendente (`features/maintenance`) | Gap MVP |
 | Isolamento entre contas | Entregue (API) | Depende das features | Gap até UI consumir API |
 | Persistência | PostgreSQL | N/A (cliente) | OK no backend |
@@ -131,7 +131,7 @@ Referência: `autotrack-mobile` e `autotrack-api` em outubro/2026.
 | Entrega pós-ATP-6 | Onde | Notas |
 | --- | --- | --- |
 | Feature perfil (edição + leitura API real) | Mobile — `features/profile` | Relacionar a ATP-29 / perfil se existir no board |
-| Feature veículos | Mobile — `features/vehicles` | Consumir `/v1/vehicles` |
+| Feature veículos | Mobile — `features/vehicles` | Entregue (ATP-37) — [vehicles.md](./vehicles.md) |
 | Feature manutenções | Mobile — `features/maintenance` | Consumir rotas de maintenance |
 | Navegação definitiva (tabs: Home / Veículos / Perfil) | Mobile — Expo Router | Substituir home temporária de sessão |
 | Desligar mock na demo | Mobile — env | `EXPO_PUBLIC_API_MOCK=false` + API up |

@@ -10,7 +10,8 @@ Escopo de produto do MVP (jornadas e aceite): [mvp-scope.md](./mvp-scope.md) (AT
 | --- | --- | --- |
 | Rotas | `src/app/` | Expo Router: layouts, params, composição de providers e telas |
 | Auth (feature) | `src/features/auth/` | Sessão Firebase, login/registro, bootstrap de perfil (Zustand), guard de rota |
-| Home (feature) | `src/features/home/` | Dashboard de manutenção + kanban de reparos (ATP-39); consome estimates |
+| Home (feature) | `src/features/home/` | Dashboard de manutenção + kanban de reparos (ATP-39); consome estimates e vehicles |
+| Vehicles (feature) | `src/features/vehicles/` | CRUD de veículos do usuário (ATP-37); tab Veículos |
 | Estimates (feature) | `src/features/estimates/` | Orçamento de reparo vinculado ao veículo (ATP-38) |
 | Design System | `src/components/ui/` | Primitivos tipados (Button, Text, Screen, …) |
 | Tema | `src/theme/` | Tokens + `AppThemeProvider` |
@@ -114,10 +115,11 @@ export default LoginScreen;
 - **Não** gerencia senha, tokens ou Firebase Auth
 - Consome `useAuth()` / `User` via API pública de auth ou DTOs próprios mapeados na borda
 
-### Veículos (`features/vehicles` — planejado)
+### Veículos (`features/vehicles` — ATP-37)
 
-- Listagem/CRUD de veículos do usuário autenticado
-- Identidade via `firebaseUid` resolvido no backend; UI não autoriza por e-mail
+- Listagem/CRUD de veículos do usuário autenticado (`/v1/vehicles`)
+- Identidade via `firebaseUid` resolvido no backend; UI não autoriza por e-mail nem envia `userId`
+- Docs: [vehicles.md](./vehicles.md)
 
 ### Manutenções (`features/maintenance` — planejado)
 

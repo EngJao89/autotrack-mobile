@@ -44,4 +44,6 @@ Modelo canônico na API: [repair-estimates-model.md](https://github.com/EngJao89
 
 ## Fora deste corte (kanban)
 
-Drag-and-drop, reopen/cancelamento a partir de `DONE`, offline-first, feature completa de veículos/perfil.
+Drag-and-drop, reopen/cancelamento a partir de `DONE`, offline-first, feature completa de perfil.
+
+Cadastro completo de veículos: [vehicles.md](./vehicles.md) (ATP-37). A Home mantém o sheet mínimo de criação via `@/features/vehicles`.
