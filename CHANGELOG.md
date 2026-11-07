@@ -12,6 +12,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Orçamentos de reparo vinculados ao veículo: cliente tipado, feature `estimates`, lista/criação/detalhe/status na Home (`ATP-38`)
 - Dashboard de manutenção com kanban (A fazer / Em andamento / Concluído), filtro por veículo, cadastro mínimo de veículo/reparo e Home de produto no lugar da home técnica (`ATP-39`)
 - Cliente HTTP Axios compartilhado (`src/services/api`), timeout configurável, cancelamento no logout, serviços tipados de health/users/vehicles/maintenances e integração com a API no Render (`ATP-40`)
 - Recuperação de senha via Firebase (`/(auth)/forgot-password`), UX enumeration-safe e retry de bootstrap de perfil sem recriar usuário (`ATP-36`)

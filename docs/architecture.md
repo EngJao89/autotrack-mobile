@@ -10,7 +10,8 @@ Escopo de produto do MVP (jornadas e aceite): [mvp-scope.md](./mvp-scope.md) (AT
 | --- | --- | --- |
 | Rotas | `src/app/` | Expo Router: layouts, params, composição de providers e telas |
 | Auth (feature) | `src/features/auth/` | Sessão Firebase, login/registro, bootstrap de perfil (Zustand), guard de rota |
-| Home (feature) | `src/features/home/` | Dashboard de manutenção + kanban de reparos (ATP-39) |
+| Home (feature) | `src/features/home/` | Dashboard de manutenção + kanban de reparos (ATP-39); consome estimates |
+| Estimates (feature) | `src/features/estimates/` | Orçamento de reparo vinculado ao veículo (ATP-38) |
 | Design System | `src/components/ui/` | Primitivos tipados (Button, Text, Screen, …) |
 | Tema | `src/theme/` | Tokens + `AppThemeProvider` |
 | Config | `src/config/` | Leitura/validação de `EXPO_PUBLIC_*` |

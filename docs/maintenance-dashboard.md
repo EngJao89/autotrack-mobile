@@ -17,7 +17,7 @@ Resumo:
 - Histórico sem status → tratado como `DONE` (nunca vira pendência inventada).
 - Sem reopen a partir de `DONE` neste corte.
 - Sem indicadores financeiros / atrasos por `createdAt`.
-- Orçamento permanece atividade separada.
+- Orçamento: feature sibling (ATP-38) — ver seção abaixo e `src/features/estimates/`.
 
 ## Mobile
 
@@ -30,6 +30,18 @@ Resumo:
 
 Filtro “Todos os veículos” chama `GET /v1/maintenances` (lista completa do usuário) para contagens consistentes.
 
-## Fora deste corte
+## Orçamentos (ATP-38)
 
-Drag-and-drop, reopen/cancelamento, orçamento, offline-first, feature completa de veículos/perfil.
+Entidade própria na API (`RepairEstimate`), **não** misturada com `Maintenance.costCents`.
+
+| Peça | Caminho |
+| --- | --- |
+| Feature | `src/features/estimates/` |
+| HTTP | `listRepairEstimates`, `createVehicleRepairEstimate`, `updateRepairEstimate` |
+| UI | Seção “Orçamentos” + sheets na `DashboardScreen` |
+
+Modelo canônico na API: [repair-estimates-model.md](https://github.com/EngJao89/autotrack-api/blob/master/docs/repair-estimates-model.md).
+
+## Fora deste corte (kanban)
+
+Drag-and-drop, reopen/cancelamento a partir de `DONE`, offline-first, feature completa de veículos/perfil.
