@@ -113,3 +113,59 @@ export type UpdateUserInput = {
   documentType?: 'CPF' | 'CNPJ' | null;
   phone?: string | null;
 };
+
+/** Repair estimate status (ATP-38). */
+export type RepairEstimateStatus = 'DRAFT' | 'FINALIZED' | 'ARCHIVED';
+
+export type RepairEstimateItemCategory = 'PART' | 'LABOR';
+
+export type RepairEstimateItem = {
+  id: string;
+  estimateId: string;
+  description: string;
+  category: RepairEstimateItemCategory;
+  quantity: number;
+  unitPriceCents: number;
+  lineTotalCents: number;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type RepairEstimate = {
+  id: string;
+  vehicleId: string;
+  title: string;
+  description: string | null;
+  currency: string;
+  status: RepairEstimateStatus;
+  totalCents: number;
+  items: RepairEstimateItem[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type RepairEstimateItemInput = {
+  description: string;
+  category: RepairEstimateItemCategory;
+  quantity: number;
+  unitPriceCents: number;
+};
+
+export type CreateRepairEstimateInput = {
+  title: string;
+  description?: string;
+  items: RepairEstimateItemInput[];
+};
+
+export type UpdateRepairEstimateInput = {
+  title?: string;
+  description?: string | null;
+  status?: RepairEstimateStatus;
+  items?: RepairEstimateItemInput[];
+};
+
+export type ListRepairEstimatesQuery = {
+  vehicleId?: string;
+  status?: RepairEstimateStatus;
+};

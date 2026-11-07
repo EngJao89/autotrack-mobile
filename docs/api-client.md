@@ -6,7 +6,7 @@ Documento da **ATP-40**. Centraliza o consumo da `autotrack-api` e a integraçã
 
 - Transporte: **Axios** (`src/services/api/client.ts`), instância compartilhada.
 - Identidade: continua no **Firebase Auth**; a API recebe só `Authorization: Bearer <firebase-id-token>`.
-- Domínio (perfil/veículos/manutenções): HTTP na API via módulos em `src/services/api/`.
+- Domínio (perfil/veículos/manutenções/orçamentos): HTTP na API via módulos em `src/services/api/`.
 - Estado/cache: **Zustand** (ATP-3) — Axios **não** substitui a camada de estado.
 
 ## Configuração
@@ -41,6 +41,7 @@ Falha HTTP **não** encerra a sessão Firebase automaticamente.
 | `users.ts` | `GET /v1/users/me`, `PATCH /v1/users/:id` |
 | `vehicles.ts` | CRUD `/v1/vehicles` |
 | `maintenances.ts` | CRUD manutenções conforme OpenAPI |
+| `estimates.ts` | CRUD orçamentos de reparo (ATP-38) |
 | `features/auth/services/bootstrapProfile.ts` | `POST /v1/auth/bootstrap` (+ fallback `/users/me`) |
 
 Telas **não** devem criar clientes Axios próprios.
