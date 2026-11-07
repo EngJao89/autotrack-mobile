@@ -10,6 +10,7 @@
 | `src/services/api/auth.ts` | `src/features/auth/services/bootstrapProfile.ts` | Bootstrap de perfil na feature; usa `api/client` |
 | `src/types/user.ts` | `src/features/auth/types/user.ts` | Tipo próximo ao consumidor atual; exportado na API pública |
 | (novo) `AuthGate` em `_layout` | `src/features/auth/AuthGate.tsx` | Guard na feature; app só compõe |
+| `src/features/home/components/CreateVehicleForm.tsx` | `src/features/vehicles/components/CreateVehicleForm.tsx` | CRUD de veículos na feature `vehicles` (ATP-37); Home só consome o barrel |
 
 ## Não movido (infra / compartilhado)
 

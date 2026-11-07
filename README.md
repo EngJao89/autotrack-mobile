@@ -192,6 +192,7 @@ O mobile consome a **autotrack-api**:
 - Ambiente publicado (Render): https://autotrack-api-5r68.onrender.com
 - Health: `GET /v1/health` · OpenAPI: `/api/docs` · JSON: `/api/docs-json`
 - Cliente Axios compartilhado: [docs/api-client.md](./docs/api-client.md) (`ATP-40`)
+- Veículos (CRUD): [docs/vehicles.md](./docs/vehicles.md) (`ATP-37`)
 
 Auth de usuários permanece no **Firebase**; perfil/veículos/manutenções usam Bearer ID Token na API.  
 Política: timeout configurável; 401 com no máximo uma renovação de token; logout cancela requests pendentes; mock só com `EXPO_PUBLIC_API_MOCK=true` (explícito na UI).
@@ -221,7 +222,8 @@ Política: timeout configurável; 401 com no máximo uma renovação de token; l
 | ✅ ATP-40 | Cliente Axios compartilhado + API Render (`docs/api-client.md`) |
 | ✅ ATP-39 | Dashboard Home + kanban de reparos (`docs/maintenance-dashboard.md`) |
 | ✅ ATP-38 | Orçamento de reparo vinculado ao veículo (`src/features/estimates/`) |
-| Planejado | Features Mobile: perfil, veículos, manutenções (CRUD completo) |
+| ✅ ATP-37 | Cadastro e gestão de veículos (`docs/vehicles.md`) |
+| Planejado | Features Mobile: perfil, manutenções (CRUD completo) |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
 
 ## Licença
