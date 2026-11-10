@@ -4,25 +4,18 @@ import { Modal, Pressable, View } from 'react-native';
 
 import { Badge, Button, Card, Loading, Screen, Text } from '@/components/ui';
 import { useAuth, useSessionStore } from '@/features/auth';
-import { CreateEstimateForm, EstimateCard, EstimateDetail } from '@/features/estimates';
 import { CreateVehicleForm } from '@/features/vehicles';
 import {
   ApiError,
   createVehicle,
   createVehicleMaintenance,
-  createVehicleRepairEstimate,
   listMaintenances,
-  listRepairEstimates,
   listVehicles,
   updateMaintenance,
-  updateRepairEstimate,
   type CreateMaintenanceInput,
-  type CreateRepairEstimateInput,
   type CreateVehicleInput,
   type Maintenance,
   type MaintenanceStatus,
-  type RepairEstimate,
-  type RepairEstimateStatus,
   type Vehicle,
 } from '@/services/api';
 import { useAppTheme } from '@/theme';
@@ -41,11 +34,12 @@ import {
 } from '../lib/kanban';
 
 type LoadState = 'idle' | 'loading' | 'ready' | 'error';
-type SheetMode = 'none' | 'repair' | 'vehicle' | 'detail' | 'estimate' | 'estimate-detail';
+type SheetMode = 'none' | 'repair' | 'vehicle' | 'detail';
 
 /**
- * Product home: maintenance kanban (ATP-39) + repair estimates (ATP-38).
- * Replaces the technical SessionHomeScreen as the authenticated entry.
+ * Product home: maintenance kanban (ATP-39).
+ * Fonte de dados: `/v1/vehicles` + `/v1/maintenances` (filtro opcional por vehicleId).
+ * Orçamentos (`/v1/estimates`) ficam fora até existirem no deploy da API.
  */
 export function DashboardScreen() {
   const theme = useAppTheme();
@@ -55,13 +49,11 @@ export function DashboardScreen() {
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [repairs, setRepairs] = useState<Maintenance[]>([]);
-  const [estimates, setEstimates] = useState<RepairEstimate[]>([]);
   const [loadState, setLoadState] = useState<LoadState>('idle');
   const [loadError, setLoadError] = useState<string | null>(null);
   const [activeColumn, setActiveColumn] = useState<MaintenanceStatus>('TODO');
   const [sheet, setSheet] = useState<SheetMode>('none');
   const [selectedRepair, setSelectedRepair] = useState<Maintenance | null>(null);
-  const [selectedEstimate, setSelectedEstimate] = useState<RepairEstimate | null>(null);
   const [mutating, setMutating] = useState(false);
 
   const vehicleFilter = selectedVehicleId;
@@ -71,14 +63,12 @@ export function DashboardScreen() {
     setLoadError(null);
     try {
       const query = vehicleFilter ? { vehicleId: vehicleFilter } : undefined;
-      const [nextVehicles, nextRepairs, nextEstimates] = await Promise.all([
+      const [nextVehicles, nextRepairs] = await Promise.all([
         listVehicles(),
         listMaintenances(query),
-        listRepairEstimates(query),
       ]);
       setVehicles(nextVehicles);
       setRepairs(nextRepairs.map((item) => ({ ...item, status: normalizeStatus(item.status) })));
-      setEstimates(nextEstimates);
       setLoadState('ready');
 
       if (vehicleFilter && !nextVehicles.some((v) => v.id === vehicleFilter)) {
@@ -146,33 +136,6 @@ export function DashboardScreen() {
     }
   };
 
-  const onCreateEstimate = async (vehicleId: string, body: CreateRepairEstimateInput) => {
-    setMutating(true);
-    try {
-      await createVehicleRepairEstimate(vehicleId, body);
-      setSheet('none');
-      await reload();
-    } finally {
-      setMutating(false);
-    }
-  };
-
-  const onChangeEstimateStatus = async (item: RepairEstimate, next: RepairEstimateStatus) => {
-    if (mutating) return;
-    setMutating(true);
-    try {
-      const updated = await updateRepairEstimate(item.id, { status: next });
-      setEstimates((list) => list.map((row) => (row.id === item.id ? updated : row)));
-      setSelectedEstimate(updated);
-    } catch (error) {
-      setLoadError(
-        error instanceof Error ? error.message : 'Não foi possível atualizar o status do orçamento.'
-      );
-    } finally {
-      setMutating(false);
-    }
-  };
-
   const onCreateVehicle = async (body: CreateVehicleInput) => {
     setMutating(true);
     try {
@@ -191,14 +154,6 @@ export function DashboardScreen() {
       return;
     }
     setSheet('repair');
-  };
-
-  const openNewEstimate = () => {
-    if (vehicles.length === 0) {
-      setSheet('vehicle');
-      return;
-    }
-    setSheet('estimate');
   };
 
   return (
@@ -276,7 +231,7 @@ export function DashboardScreen() {
             ) : null}
 
             {loadState === 'ready' && vehicles.length === 0 ? (
-              <Card elevated>
+              <Card>
                 <View style={{ gap: theme.spacing[12] }}>
                   <Text variant="subtitle">Nenhum veículo</Text>
                   <Text variant="body" color="secondary">
@@ -289,42 +244,6 @@ export function DashboardScreen() {
 
             {vehicles.length > 0 ? (
               <>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: theme.spacing[8],
-                  }}
-                >
-                  <Text variant="subtitle">Orçamentos</Text>
-                  <Button label="Novo orçamento" onPress={openNewEstimate} />
-                </View>
-
-                {estimates.length === 0 ? (
-                  <Card>
-                    <Text variant="body" color="secondary">
-                      Nenhum orçamento neste filtro. Use “Novo orçamento” para estimar um reparo.
-                    </Text>
-                  </Card>
-                ) : (
-                  <View style={{ gap: theme.spacing[12] }}>
-                    {estimates.map((item) => (
-                      <EstimateCard
-                        key={item.id}
-                        item={item}
-                        vehicle={vehicleMap.get(item.vehicleId)}
-                        showVehicle={!vehicleFilter}
-                        busy={mutating}
-                        onOpen={(estimate) => {
-                          setSelectedEstimate(estimate);
-                          setSheet('estimate-detail');
-                        }}
-                      />
-                    ))}
-                  </View>
-                )}
-
                 <SummaryRow counts={counts} />
 
                 <View
@@ -435,16 +354,6 @@ export function DashboardScreen() {
               />
             ) : null}
 
-            {sheet === 'estimate' ? (
-              <CreateEstimateForm
-                vehicles={vehicles}
-                preferredVehicleId={vehicleFilter}
-                submitting={mutating}
-                onSubmit={onCreateEstimate}
-                onCancel={() => setSheet('none')}
-              />
-            ) : null}
-
             {sheet === 'vehicle' ? (
               <CreateVehicleForm
                 submitting={mutating}
@@ -475,16 +384,6 @@ export function DashboardScreen() {
                 ) : null}
                 <Button label="Fechar" variant="secondary" onPress={() => setSheet('none')} />
               </View>
-            ) : null}
-
-            {sheet === 'estimate-detail' && selectedEstimate ? (
-              <EstimateDetail
-                estimate={selectedEstimate}
-                vehicle={vehicleMap.get(selectedEstimate.vehicleId)}
-                busy={mutating}
-                onChangeStatus={(next) => void onChangeEstimateStatus(selectedEstimate, next)}
-                onClose={() => setSheet('none')}
-              />
             ) : null}
           </View>
         </View>

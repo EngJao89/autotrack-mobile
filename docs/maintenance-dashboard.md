@@ -17,8 +17,6 @@ Resumo:
 - Histórico sem status → tratado como `DONE` (nunca vira pendência inventada).
 - Sem reopen a partir de `DONE` neste corte.
 - Sem indicadores financeiros / atrasos por `createdAt`.
-- Orçamento: feature sibling (ATP-38) — ver seção abaixo e `src/features/estimates/`.
-
 ## Mobile
 
 | Peça | Caminho |
@@ -26,21 +24,13 @@ Resumo:
 | Rota Home | `src/app/(tabs)/index.tsx` → `DashboardScreen` |
 | Feature | `src/features/home/` |
 | Agrupamento/contagens | `src/features/home/lib/kanban.ts` |
-| HTTP | `listMaintenances`, `createVehicleMaintenance`, `updateMaintenance`, `listVehicles`, `createVehicle` |
+| HTTP | `listMaintenances` (`GET /v1/maintenances`), `createVehicleMaintenance`, `updateMaintenance`, `listVehicles`, `createVehicle` |
 
-Filtro “Todos os veículos” chama `GET /v1/maintenances` (lista completa do usuário) para contagens consistentes.
+Filtro “Todos os veículos” chama `GET /v1/maintenances` (lista completa do usuário) para contagens consistentes. Com veículo selecionado, usa `?vehicleId=`.
 
 ## Orçamentos (ATP-38)
 
-Entidade própria na API (`RepairEstimate`), **não** misturada com `Maintenance.costCents`.
-
-| Peça | Caminho |
-| --- | --- |
-| Feature | `src/features/estimates/` |
-| HTTP | `listRepairEstimates`, `createVehicleRepairEstimate`, `updateRepairEstimate` |
-| UI | Seção “Orçamentos” + sheets na `DashboardScreen` |
-
-Modelo canônico na API: [repair-estimates-model.md](https://github.com/EngJao89/autotrack-api/blob/master/docs/repair-estimates-model.md).
+O código tipado de orçamentos permanece em `src/features/estimates/` e `src/services/api/estimates.ts`, mas a **Home não consome** `/v1/estimates` enquanto o deploy publicado não expõe essas rotas (OpenAPI atual: só Maintenance). Modelo canônico na API: [repair-estimates-model.md](https://github.com/EngJao89/autotrack-api/blob/master/docs/repair-estimates-model.md).
 
 ## Fora deste corte (kanban)
 
