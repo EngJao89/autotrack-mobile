@@ -8,6 +8,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- Home deixa de chamar `/v1/estimates` (inexistente no deploy publicado) e usa só `/v1/vehicles` + `/v1/maintenances` para o kanban
 - Documented post-login `AUTH_TOKEN_INVALID` troubleshooting when API `FIREBASE_PROJECT_ID` mismatches the mobile Firebase project ([ATP-41])
 
 ### Added
