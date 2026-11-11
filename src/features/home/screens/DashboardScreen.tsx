@@ -22,6 +22,7 @@ import { useAppTheme } from '@/theme';
 
 import { CreateRepairForm } from '../components/CreateRepairForm';
 import { RepairCard } from '../components/RepairCard';
+import { RepairDetail } from '../components/RepairDetail';
 import { SummaryRow } from '../components/SummaryRow';
 import { VehiclePicker } from '../components/VehiclePicker';
 import {
@@ -29,7 +30,6 @@ import {
   countByStatus,
   groupByStatus,
   normalizeStatus,
-  repairTitle,
   statusLabel,
 } from '../lib/kanban';
 
@@ -363,27 +363,11 @@ export function DashboardScreen() {
             ) : null}
 
             {sheet === 'detail' && selectedRepair ? (
-              <View style={{ gap: theme.spacing[12] }}>
-                <Text variant="subtitle">{repairTitle(selectedRepair)}</Text>
-                <Badge label={statusLabel(selectedRepair.status)} tone="neutral" />
-                <Text variant="body" color="secondary">
-                  Tipo: {selectedRepair.type}
-                </Text>
-                <Text variant="body" color="secondary">
-                  Data: {new Date(selectedRepair.serviceDate).toLocaleDateString('pt-BR')}
-                </Text>
-                {selectedRepair.workshopName ? (
-                  <Text variant="body" color="secondary">
-                    Oficina: {selectedRepair.workshopName}
-                  </Text>
-                ) : null}
-                {selectedRepair.notes ? (
-                  <Text variant="body" color="secondary">
-                    Notas: {selectedRepair.notes}
-                  </Text>
-                ) : null}
-                <Button label="Fechar" variant="secondary" onPress={() => setSheet('none')} />
-              </View>
+              <RepairDetail
+                item={selectedRepair}
+                vehicle={vehicleMap.get(selectedRepair.vehicleId)}
+                onClose={() => setSheet('none')}
+              />
             ) : null}
           </View>
         </View>

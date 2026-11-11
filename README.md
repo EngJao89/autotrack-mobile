@@ -221,6 +221,7 @@ Política: timeout configurável; 401 com no máximo uma renovação de token; l
 | ✅ ATP-36 | Login/cadastro UX + recuperação de senha Firebase |
 | ✅ ATP-40 | Cliente Axios compartilhado + API Render (`docs/api-client.md`) |
 | ✅ ATP-39 | Dashboard Home + kanban de reparos (`docs/maintenance-dashboard.md`) |
+| ✅ ATP-48 | Detalhes completos da manutenção no bottom sheet |
 | ✅ ATP-38 | Orçamento de reparo vinculado ao veículo (`src/features/estimates/`) |
 | ✅ ATP-37 | Cadastro e gestão de veículos (`docs/vehicles.md`) |
 | Planejado | Features Mobile: perfil, manutenções (CRUD completo) |
