@@ -13,6 +13,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Campo opcional “Valor do serviço” (BRL → `costCents`) no cadastro de novos reparos, com validação e consulta no card/detalhe (`ATP-47`)
 - Bottom sheet de manutenção com detalhes de negócio completos (resumo, veículo, serviço, datas/valores) e mapeamento de campos (`ATP-48`)
 - Feature de veículos: tab Veículos com listagem/cadastro/detalhe/edição/exclusão, validação de ano/km, placa uppercase e docs (`ATP-37`)
 - Orçamentos de reparo vinculados ao veículo: cliente tipado, feature `estimates`, lista/criação/detalhe/status na Home (`ATP-38`)

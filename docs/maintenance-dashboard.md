@@ -32,6 +32,20 @@ Filtro “Todos os veículos” chama `GET /v1/maintenances` (lista completa do 
 
 O código tipado de orçamentos permanece em `src/features/estimates/` e `src/services/api/estimates.ts`, mas a **Home não consome** `/v1/estimates` enquanto o deploy publicado não expõe essas rotas (OpenAPI atual: só Maintenance). Modelo canônico na API: [repair-estimates-model.md](https://github.com/EngJao89/autotrack-api/blob/master/docs/repair-estimates-model.md).
 
+## Valor do serviço no cadastro (ATP-47)
+
+Campo **Valor do serviço (opcional)** no formulário Novo reparo (`CreateRepairForm`).
+
+| Regra | Decisão |
+| --- | --- |
+| Contrato | `costCents` inteiro ≥ 0 (já no `CreateMaintenanceDto`) — **sem** mudança de API |
+| Moeda | BRL; UI em reais (`150,00`); API só recebe centavos |
+| Obrigatório? | Não — reparo planejado pode ficar sem preço |
+| Vazio | Omite `costCents` (não informado ≠ zero) |
+| Zero | Envia `0` (serviço sem custo) |
+| Negativos | Rejeitados no Mobile |
+| Consulta | Card (quando informado) + detalhe ATP-48 |
+
 ## Detalhe no bottom sheet (ATP-48)
 
 O botão **Detalhes** abre `RepairDetail` (somente leitura) com seções Resumo / Veículo / Serviço / Datas e valores.

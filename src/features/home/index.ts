@@ -6,6 +6,7 @@ export {
   MAINTENANCE_DETAIL_FIELD_MAP,
   serviceDateLabel,
 } from './lib/detailFormat';
+export { COST_CENTS_MAX, parseReaisToCents } from './lib/money';
 export {
   KANBAN_COLUMNS,
   canTransition,
