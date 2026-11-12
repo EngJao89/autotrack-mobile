@@ -4,6 +4,7 @@ import { Badge, Button, Card, Text } from '@/components/ui';
 import type { Maintenance, MaintenanceStatus, Vehicle } from '@/services/api';
 import { useAppTheme } from '@/theme';
 
+import { formatCostCents } from '../lib/detailFormat';
 import { allowedTransitions, repairTitle, statusLabel } from '../lib/kanban';
 
 type RepairCardProps = {
@@ -59,6 +60,12 @@ export function RepairCard({
         <Text variant="caption" color="secondary">
           Data: {formatDate(item.serviceDate)}
         </Text>
+
+        {item.costCents != null ? (
+          <Text variant="caption" color="secondary">
+            Valor: {formatCostCents(item.costCents)}
+          </Text>
+        ) : null}
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[8] }}>
           <Button
