@@ -119,7 +119,7 @@ Referência: `autotrack-mobile` e `autotrack-api` em outubro/2026.
 | Bootstrap / perfil leitura | Entregue | Parcial (bootstrap + home sessão; mock possível) | Gap: demo sem mock |
 | Edição de perfil | Entregue | Pendente (`features/profile`) | Gap MVP |
 | Vehicles CRUD + ownership | Entregue | Entregue (`features/vehicles`, ATP-37) | Base OK |
-| Maintenance CRUD + histórico | Entregue | Pendente (`features/maintenance`) | Gap MVP |
+| Maintenance CRUD + histórico | Entregue | Parcial (`features/maintenance` histórico ATP-46; CRUD completo pendente) | Gap: CRUD |
 | Isolamento entre contas | Entregue (API) | Depende das features | Gap até UI consumir API |
 | Persistência | PostgreSQL | N/A (cliente) | OK no backend |
 | Design System / feature-first / ADRs / estado (Zustand) | N/A | Entregue (base) | Não é jornada de negócio |
@@ -132,7 +132,7 @@ Referência: `autotrack-mobile` e `autotrack-api` em outubro/2026.
 | --- | --- | --- |
 | Feature perfil (edição + leitura API real) | Mobile — `features/profile` | Relacionar a ATP-29 / perfil se existir no board |
 | Feature veículos | Mobile — `features/vehicles` | Entregue (ATP-37) — [vehicles.md](./vehicles.md) |
-| Feature manutenções | Mobile — `features/maintenance` | Consumir rotas de maintenance |
+| Feature manutenções | Mobile — `features/maintenance` | Histórico em cards entregue (ATP-46); CRUD completo ainda pendente |
 | Navegação definitiva (tabs: Home / Veículos / Perfil) | Mobile — Expo Router | Substituir home temporária de sessão |
 | Desligar mock na demo | Mobile — env | `EXPO_PUBLIC_API_MOCK=false` + API up |
 | Fronteira / contratos | Já docs | [api-mobile-boundary](https://github.com/EngJao89/autotrack-api/blob/master/docs/api-mobile-boundary.md) (API ATP-13) + ADR 0003 Mobile |

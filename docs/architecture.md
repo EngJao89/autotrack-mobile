@@ -12,6 +12,7 @@ Escopo de produto do MVP (jornadas e aceite): [mvp-scope.md](./mvp-scope.md) (AT
 | Auth (feature) | `src/features/auth/` | Sessão Firebase, login/registro, bootstrap de perfil (Zustand), guard de rota |
 | Home (feature) | `src/features/home/` | Dashboard de manutenção + kanban de reparos (ATP-39); consome estimates e vehicles |
 | Vehicles (feature) | `src/features/vehicles/` | CRUD de veículos do usuário (ATP-37); tab Veículos |
+| Maintenance (feature) | `src/features/maintenance/` | Histórico de manutenções realizadas em cards (ATP-46); tab Manutenções |
 | Estimates (feature) | `src/features/estimates/` | Orçamento de reparo vinculado ao veículo (ATP-38) |
 | Design System | `src/components/ui/` | Primitivos tipados (Button, Text, Screen, …) |
 | Tema | `src/theme/` | Tokens + `AppThemeProvider` |
@@ -121,10 +122,11 @@ export default LoginScreen;
 - Identidade via `firebaseUid` resolvido no backend; UI não autoriza por e-mail nem envia `userId`
 - Docs: [vehicles.md](./vehicles.md)
 
-### Manutenções (`features/maintenance` — planejado)
+### Manutenções (`features/maintenance` — ATP-46)
 
-- Histórico e operações ligadas a um veículo
-- Recebe `vehicleId` por contrato explícito (params/props), sem acoplar a arquivos internos de vehicles
+- Histórico geral de manutenções realizadas (`status=DONE`) em cards; tab Manutenções
+- Rótulo do veículo via `listVehicles` (sem importar internos de vehicles)
+- CRUD/detalhe/filtro por veículo: fora deste corte — docs: [maintenance-history.md](./maintenance-history.md)
 
 ### Compartilhado
 
@@ -155,7 +157,7 @@ O script analisa imports `@/` em `src/` e falha se:
 
 ## Exceções conhecidas
 
-- Componentes legados do template Expo (`themed-text`, `constants/theme`) ainda usados em Explore; fora do Design System novo.
+- Componentes legados do template Expo (`themed-text`, `constants/theme`) ainda usados em UI Kit / web tabs; fora do Design System novo.
 - `SessionHomeScreen` fica em auth até existir home/domínio de perfil — provisório e documentado.
 
 ## Relacionados

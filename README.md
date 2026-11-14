@@ -123,7 +123,7 @@ Convenções e limites: [docs/architecture.md](./docs/architecture.md).
 ADRs (Firebase, persistência, fronteira API/Mobile, Zustand): [docs/adr/README.md](./docs/adr/README.md).  
 Estado cliente: [docs/state-management.md](./docs/state-management.md).  
 Catálogo visual: rota `/design-system` (aba **UI Kit**).  
-Features futuras (perfil, veículos, manutenções) têm limites documentados — **sem** pastas vazias nesta fase.
+Features futuras (perfil, CRUD completo de manutenções) têm limites documentados — **sem** pastas vazias nesta fase.
 
 Código de rota fica em `src/app/` e apenas reexporta/compõe features.
 
@@ -225,7 +225,8 @@ Política: timeout configurável; 401 com no máximo uma renovação de token; l
 | ✅ ATP-47 | Valor do serviço no cadastro de novos reparos |
 | ✅ ATP-38 | Orçamento de reparo vinculado ao veículo (`src/features/estimates/`) |
 | ✅ ATP-37 | Cadastro e gestão de veículos (`docs/vehicles.md`) |
-| Planejado | Features Mobile: perfil, manutenções (CRUD completo) |
+| ✅ ATP-46 | Histórico de manutenções em cards (`docs/maintenance-history.md`) |
+| Planejado | Features Mobile: perfil, CRUD completo de manutenções |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
 
 ## Licença

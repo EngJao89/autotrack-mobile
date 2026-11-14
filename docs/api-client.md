@@ -61,4 +61,4 @@ Cancelamento esperado (`AbortSignal`) → `aborted: true` — UI não deve trata
 
 - Tipos manuais alinhados ao OpenAPI até codegen (ATP-12).
 - Cold start Render pode aproximar o timeout — ajuste `EXPO_PUBLIC_API_TIMEOUT_MS` se necessário.
-- UI de veículos: `features/vehicles` (ATP-37). Manutenções completas e perfil editável permanecem em ATPs próprias.
+- UI de veículos: `features/vehicles` (ATP-37). Histórico de manutenções: `features/maintenance` (ATP-46). CRUD completo de manutenções e perfil editável permanecem em ATPs próprias.
