@@ -27,8 +27,8 @@ export default function AppTabs() {
           <TabTrigger name="vehicles" href="/vehicles" asChild>
             <TabButton>Veículos</TabButton>
           </TabTrigger>
-          <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Explore</TabButton>
+          <TabTrigger name="maintenances" href="/maintenances" asChild>
+            <TabButton>Manutenções</TabButton>
           </TabTrigger>
           <TabTrigger name="design-system" href="/design-system" asChild>
             <TabButton>UI Kit</TabButton>

@@ -13,6 +13,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Added
 
+- Tab **Manutenções** no lugar de Explore: histórico virtualizado de cards (`status=DONE`), pull-to-refresh e estados loading/vazio/erro (`ATP-46`)
 - Campo opcional “Valor do serviço” (BRL → `costCents`) no cadastro de novos reparos, com validação e consulta no card/detalhe (`ATP-47`)
 - Bottom sheet de manutenção com detalhes de negócio completos (resumo, veículo, serviço, datas/valores) e mapeamento de campos (`ATP-48`)
 - Feature de veículos: tab Veículos com listagem/cadastro/detalhe/edição/exclusão, validação de ano/km, placa uppercase e docs (`ATP-37`)
@@ -28,6 +29,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Changed
 
+- Aba Explore (starter Expo) substituída por Manutenções com dados reais da API (`ATP-46`)
 - Tab Home passa a renderizar `DashboardScreen` (produto), sem diagnóstico/token na entrada autenticada (`ATP-39`)
 - Transporte HTTP migrado de `fetch` para Axios; bootstrap alinha resposta `{ created, user }` do contrato OpenAPI (`ATP-40`)
 - Login/cadastro: bloqueio de envio duplicado, link “Esqueci minha senha” e feedback de sessão/perfil na home (`ATP-36`)
