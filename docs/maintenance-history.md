@@ -48,7 +48,7 @@ Ownership: Bearer na API — o client **não** envia `userId`. Estado limpo no l
 | Filtro / sort / card model | `src/features/maintenance/lib/history.ts` |
 | Tabs | `src/components/app-tabs.tsx` + `.web.tsx` |
 
-Ícone da aba: reutiliza o asset atual; troca definitiva de ícones fica na **ATP-45**.
+Ícone da aba: ferramenta (`build` / `wrench.and.screwdriver`) — ver [bottom-tab-icons.md](./bottom-tab-icons.md) (ATP-45).
 
 ## Relação com outras ATPs
 

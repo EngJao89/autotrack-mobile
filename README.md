@@ -226,6 +226,7 @@ Política: timeout configurável; 401 com no máximo uma renovação de token; l
 | ✅ ATP-38 | Orçamento de reparo vinculado ao veículo (`src/features/estimates/`) |
 | ✅ ATP-37 | Cadastro e gestão de veículos (`docs/vehicles.md`) |
 | ✅ ATP-46 | Histórico de manutenções em cards (`docs/maintenance-history.md`) |
+| ✅ ATP-45 | Ícones do bottom tab por destino (`docs/bottom-tab-icons.md`) |
 | Planejado | Features Mobile: perfil, CRUD completo de manutenções |
 | Planejado | CI/CD, EAS Build e publicação nas stores |
 

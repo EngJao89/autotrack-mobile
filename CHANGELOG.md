@@ -8,6 +8,7 @@ e este projeto adere a [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Fixed
+- Ícones do bottom tab passam a ser semânticos por destino (casa, carro, ferramenta, paleta) em vez de `explore.png` repetido (`ATP-45`)
 - Home deixa de chamar `/v1/estimates` (inexistente no deploy publicado) e usa só `/v1/vehicles` + `/v1/maintenances` para o kanban
 - Documented post-login `AUTH_TOKEN_INVALID` troubleshooting when API `FIREBASE_PROJECT_ID` mismatches the mobile Firebase project ([ATP-41])
 
